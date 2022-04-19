@@ -1,0 +1,5 @@
+1. vérifier bug windows
+2. ajouter exports partout
+3. finir refactor
+4. corpus contient des ID et pas des fichiers !
+5. 
