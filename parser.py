@@ -7,6 +7,9 @@ utf8Dico = {utf[0]:utf[1].strip('\n') for utf in utf_code}
 
 def dateTranslation(date_input) : # Traduction des mois en lettres en chiffres
     date_tmp = date_input.split(" ")
+    for element in date_tmp:
+        if(element == "" or element == " "):
+            date_tmp.remove("")
     jour = date_tmp[1]
     mois = date_tmp[2]
     annee = date_tmp[3]
@@ -52,7 +55,7 @@ def cutter() :
             shutil.rmtree("tmp/" + str(bigFile))
             os.mkdir("tmp/" + str(bigFile))
             True
-        with open("__MAIL_DEPOT__/" + bigFile, encoding="utf-8") as currentBigFile:
+        with open("__MAIL_DEPOT__/" + bigFile, encoding="utf-8", errors="surrogateescape") as currentBigFile:
             mailCount = 0
             writingState = 0
             for line in currentBigFile:
@@ -62,13 +65,13 @@ def cutter() :
                     except:
                         True
                     mailCount += 1
-                    mailFile = open("tmp/" + str(bigFile) + "/" + str(mailCount), "w", encoding="utf-8")
+                    mailFile = open("tmp/" + str(bigFile) + "/" + str(mailCount), "w",encoding="utf-8", errors="surrogateescape")
                     writingState = 1
 
                 elif(line.startswith("From - ") and writingState == 1):
                     mailFile.close()
                     mailCount += 1
-                    mailFile = open("tmp/" + str(bigFile) + "/" + str(mailCount), "w", encoding="utf-8")
+                    mailFile = open("tmp/" + str(bigFile) + "/" + str(mailCount), "w", encoding="utf-8", errors="surrogateescape")
                     writingState = 0
 
                 mailFile.write(line)
@@ -87,7 +90,7 @@ def cleaner() :
             objet = "__Object__ "
             pieceJ = "__PJ__ "
             content = "__CONTENT__ "
-            currentFile = open("tmp/" + dossier +"/"+ file, encoding="utf-8").readlines()
+            currentFile = open("tmp/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
             for i in range(len(currentFile)):
                 ligne = currentFile[i]
                 # Récupération de la date du mail
@@ -105,6 +108,8 @@ def cleaner() :
                         objTMP = objTMP.replace("<",'-')
                         objTMP = objTMP.replace(">",'-')
                         objTMP = objTMP.replace("|",'-')
+                    if(objTMP.find(".")):
+                        objTMP.replace(".","")
                     if(objTMP.startswith("Re - ")) :
                         objTMP = objTMP[5:]
                     if(objTMP.startswith("Re- ")):
@@ -187,7 +192,7 @@ def cleaner() :
             mailArray.append(objet + "\n")
             mailArray.append(pieceJ + "\n")
             mailArray.append(newContent)
-            newMail = open("tmp/" + dossier +"/"+ str(mailCount), "w", encoding="utf-8")
+            newMail = open("tmp/" + dossier +"/"+ file, "w", encoding="utf-8", errors="surrogateescape")
             for line in mailArray:
                 newMail.write(line)
             newMail.close()
@@ -197,7 +202,7 @@ def cleaner() :
 def threader():
     for dossier in os.listdir("tmp"):
         for file in os.listdir("tmp/" + dossier):
-            currentFile = open("tmp/" + dossier +"/"+ file, "r", encoding="utf-8").readlines()
+            currentFile = open("tmp/" + dossier +"/"+ file, "r", encoding="utf-8", errors="surrogateescape").readlines()
             objet = currentFile[3][11:]
             try:
                 if(os.name == "posix"):
@@ -210,7 +215,7 @@ def threader():
             date = fullDateTime[0].split("/")
             time = fullDateTime[1].split(":")
             dateTime = str(date[2] + "_" + date[1] + "_" + date[0] + "-" + time[0] + "_" + time[1] + "_" + time[2])
-            newFile = open("threads/" + str(objet.replace("\n","")) + "/" + str(dateTime), "w", encoding="utf-8")
+            newFile = open("threads/" + str(objet.replace("\n","")) + "/" + str(dateTime.replace("\n","")), "w", encoding="utf-8", errors="surrogateescape")
             for line in currentFile:
                 newFile.write(line)
             newFile.close()

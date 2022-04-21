@@ -24,7 +24,7 @@ def nb_mail_adresse(ad):
     cpt = 0;
     for path, subdirs, files in os.walk('tmp'):
         for name in files:
-            with open(os.path.join(path, name), "r", encoding="utf-8") as fd:
+            with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
                 for ligne in fd:
                     if (ligne.startswith("__From__")):
                         if ligne.split(" ")[1][:-1] == ad:
@@ -41,7 +41,7 @@ def all_adr():
     l = []
     for path, subdirs, files in os.walk('tmp'):
         for name in files:
-            with open(os.path.join(path, name), "r", encoding="utf-8") as fd:
+            with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
                 for ligne in fd:
                     if (ligne.startswith("__From__")):
                         adr = ligne.split(" ")[1][:-1]
@@ -68,7 +68,7 @@ def rapport_total():
     ans = all_dates()
     nb_total = total_mail()
     #Création du fichier du rapport
-    f = open("rapport complet", "w", encoding="utf-8") 
+    f = open("rapport complet", "w", encoding="utf-8", errors="surrogateescape") 
     
     for an in ans:
         nb_an = nb_mail_annee(an)

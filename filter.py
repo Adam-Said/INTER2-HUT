@@ -15,7 +15,7 @@ def main():
         adressesList = exp.split(" ")
         for dossier in os.listdir("tmp") :
             for file in os.listdir("tmp/" + dossier):
-                current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8").readlines()
+                current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
                 for adresse in adressesList :
                     if(adresse in current_file[1] or adresse in current_file[2]) :
                         nb_mail +=1
@@ -39,7 +39,7 @@ def main():
         if(choice2 == 1) : # Recherche date exacte
             for dossier in os.listdir("tmp") :
                 for file in os.listdir("tmp/" + dossier):
-                    current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8").readlines()
+                    current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
                     date_gen = current_file[0].split(" ") #ligne avec la date
                     date_mail = datetime.strptime((date_gen[1]), "%d/%m/%Y") #Date du mail
                     if(exp == date_mail) :
@@ -52,7 +52,7 @@ def main():
         elif(choice2 == 2) : # Recherche date exacte et avant
             for dossier in os.listdir("tmp") :
                 for file in os.listdir("tmp/" + dossier):
-                    current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8").readlines()
+                    current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
                     date_gen = current_file[0].split(" ") #ligne avec la date
                     date_mail = datetime.strptime((date_gen[1]), '%d/%m/%Y') #Date du mail
                     if(date_mail <= exp) :
@@ -65,7 +65,7 @@ def main():
         elif(choice2 == 3) : # Recherche date exacte et après
             for dossier in os.listdir("tmp") :
                 for file in os.listdir("tmp/" + dossier):
-                    current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8").readlines()
+                    current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
                     date_gen = current_file[0].split(" ") #ligne avec la date
                     date_mail = datetime.strptime((date_gen[1]), '%d/%m/%Y') #Date et horraire du mail
                     if(date_mail >= exp) :
@@ -85,7 +85,7 @@ def main():
                 exit(1)
             for dossier in os.listdir("tmp") :
                 for file in os.listdir("tmp/" + dossier):
-                    current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8").readlines()
+                    current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
                     date_gen = current_file[0].split(" ") #ligne avec la date
                     date_mail = datetime.strptime((date_gen[1]), '%d/%m/%Y') #Date et horraire du mail
                     if(exp <= date_mail <= exp2) :
@@ -100,7 +100,7 @@ def main():
         flag = (exp.lower() == "o")
         for dossier in os.listdir("tmp") :
             for file in os.listdir("tmp" + "/" + dossier):
-                current_file = open("tmp" + "/" + dossier +"/"+ file, encoding="utf-8").readlines()
+                current_file = open("tmp" + "/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
                 if(("." in current_file[4]) == flag) :
                     nb_mail +=1
                     date = current_file[0][9:]
@@ -112,7 +112,7 @@ def main():
         exp = str(input("Mot-clé à rechercher :"))
         for dossier in os.listdir("tmp") :
             for file in os.listdir("tmp" + "/" + dossier):
-                current_file = open("tmp" + "/" + dossier +"/"+ file, encoding="utf-8").readlines()
+                current_file = open("tmp" + "/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
                 if((exp in current_file[3])) :
                     nb_mail +=1
                     date = current_file[0][9:]
@@ -124,7 +124,7 @@ def main():
         exp = str(input("Mot-clé à rechercher :"))
         for dossier in os.listdir("tmp") :
             for file in os.listdir("tmp" + "/" + dossier):
-                current_file = open("tmp" + "/" + dossier +"/"+ file, encoding="utf-8").readlines()
+                current_file = open("tmp" + "/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
                 i = 5
                 while(i < len(current_file)):
                     if((exp in current_file[i])) :

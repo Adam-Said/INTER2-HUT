@@ -13,7 +13,7 @@ def affichageMail():
     print("Liste complète des mails :\n")
     for dossier in os.listdir("tmp") :
         for file in os.listdir("tmp/" +  dossier):
-            current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8").readlines()
+            current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
             obj = current_file[3][11:]
             exped = current_file[1][9:]
             print(str(nb_mail)+". Objet : "+obj+" De : "+exped)
@@ -25,7 +25,7 @@ def affichageMailCorpus(corpus):
   for i in range(len(corpus.split(" "))-1):
         dossier = (corpus.split(" ")[i]).split("-")[0]
         file = (corpus.split(" ")[i]).split("-")[1]
-        current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8").readlines()
+        current_file = open("tmp/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
         obj = current_file[3][11:]
         exped = current_file[1][9:]
         print(str(nb_mail)+". Objet : "+obj+" De : "+exped)
@@ -57,7 +57,7 @@ def menuPrincipal():
         nb_mail = 0
         for file in os.listdir("threads/" + corpus) :
             nb_mail +=1
-            current_file = open("threads/" + corpus +"/"+ file, encoding="utf-8").readlines()
+            current_file = open("threads/" + corpus +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
             obj = current_file[3][11:]
             exped = current_file[1][9:]
             date = current_file[0][9:]
@@ -132,18 +132,18 @@ def main() :
         check = input("Pour commencer, ajoutez vos fichiers à traiter dans le dossier __MAIL_DEPOT__ puis écrivez \"ok\" \n")
     
     # Découpage des mails
-    print("Découpage des mails...")
+    print("Découpage des mails, merci de patienter...\n Cette opération peut prendre du temps !")
     parser.cutter()
     print("Découpage des mails terminé")
 
     # Nettoyage des mails
-    print("Nettoyage des mails...")
+    print("Nettoyage des mails, merci de patienter...\n Cette opération peut prendre du temps !")
     parser.cleaner()
     print("Nettoyage des mails terminé")
 
     # Création des threads
-    print("Création des threads...")
-    parser.threader()
+    print("Création des threads, merci de patienter...\n Cette opération peut prendre du temps !")
+    #parser.threader()
     print("Création des threads terminé")
 
     while(True):

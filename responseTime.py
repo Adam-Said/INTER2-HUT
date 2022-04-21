@@ -8,7 +8,7 @@ def getTimesFolder(folder) :
     resTab = []
     for mail in os.listdir(folder):
         tempTab = []
-        currentFile = open(folder + str(mail), encoding="utf-8").readlines()
+        currentFile = open(folder + str(mail), encoding="utf-8", errors="surrogateescape").readlines()
         sSender = currentFile[1][9:-1]
         sDate = currentFile[0][9:-1]
         dtDate = datetime.strptime(sDate, "%d/%m/%Y %H:%M:%S")
@@ -60,7 +60,7 @@ def main(corpus):
         resString = ""
         for i in arrayTimes :
             resString += i[0] + "\t" + str(i[1]) + "\n"
-        text_file = open(corpus+".txt", "w", encoding="utf-8")
+        text_file = open(corpus+".txt", "w", encoding="utf-8", errors="surrogateescape")
         text_file.write(resString)
         text_file.close()
         print("Données exportées avec succès")
