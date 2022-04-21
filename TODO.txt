@@ -1,5 +1,6 @@
-1. vérifier bug windows
-2. ajouter exports partout
-3. finir refactor
-4. corpus contient des ID et pas des fichiers !
-5. 
+🟨 1. Fonction stat complète (Gatien)
+🟥 2. Vérifier exports
+🟥 3. Ajouter lors de la création de threads des fonctions pour merge des objets si ils se ressemblent
+🟥 4. Faire le rapport
+🟥 5. Mettre le rapport en Latex
+🟥 6. Diapo oral (on a large le temps)
