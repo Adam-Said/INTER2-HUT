@@ -193,7 +193,7 @@ def cleaner() :
             newMail.close()
 
 
-# make function to take file from folder and sort them in folder grouped by object
+
 def threader():
     for dossier in os.listdir("tmp"):
         for file in os.listdir("tmp/" + dossier):

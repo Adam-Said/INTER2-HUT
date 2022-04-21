@@ -127,7 +127,7 @@ def main() :
         True
     
     # Attente du dépôt des fichiers
-    check = ""
+    check = "ok" #ok si debug_mode
     while check != "ok" or len(os.listdir('__MAIL_DEPOT__')) == 0:
         check = input("Pour commencer, ajoutez vos fichiers à traiter dans le dossier __MAIL_DEPOT__ puis écrivez \"ok\" \n")
     

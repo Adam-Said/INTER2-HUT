@@ -133,4 +133,5 @@ dmypy.json
 **/tmp
 **/META
 **/threads
+TODO.txt
 .replit
