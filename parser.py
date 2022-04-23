@@ -108,8 +108,8 @@ def cleaner() :
                         objTMP = objTMP.replace("<",'-')
                         objTMP = objTMP.replace(">",'-')
                         objTMP = objTMP.replace("|",'-')
-                    if(objTMP.find(".")):
-                        objTMP.replace(".","")
+                    if(objTMP.find('.')):
+                        objTMP = objTMP.replace('.',"")
                     if(objTMP.startswith("Re - ")) :
                         objTMP = objTMP[5:]
                     if(objTMP.startswith("Re- ")):
@@ -124,8 +124,9 @@ def cleaner() :
                         objTMP = objTMP[3:]
                     if(objTMP.startswith(" ")) :
                         objTMP = objTMP[1:]
+                    if(objTMP.endswith(" ") or objTMP.endswith(" \n")) :
+                        objTMP = objTMP[:-2]
                     objet += objTMP.split("\n")[0]
-                    
                 # Récupération de l'expéditeur
                 if (ligne.startswith('From:')) and (expediteur == "__From__ "):
                     expediteur = expediteur + ligne[ligne.find("<") + 1:ligne.find(">")]
@@ -204,6 +205,7 @@ def threader():
         for file in os.listdir("tmp/" + dossier):
             currentFile = open("tmp/" + dossier +"/"+ file, "r", encoding="utf-8", errors="surrogateescape").readlines()
             objet = currentFile[3][11:]
+            print("no "+ file + " obj "+ objet)
             try:
                 if(os.name == "posix"):
                     os.mkdir("threads/" + str(objet.replace("\n","")))

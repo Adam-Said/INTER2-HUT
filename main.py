@@ -143,7 +143,7 @@ def main() :
 
     # Création des threads
     print("Création des threads, merci de patienter...\n Cette opération peut prendre du temps !")
-    #parser.threader()
+    parser.threader()
     print("Création des threads terminé")
 
     while(True):
