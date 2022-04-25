@@ -3,16 +3,20 @@ false = False
 import os
 import clean
 
+
+
 def total_mail():
-    cpt = 0;
+    cpt = 0
     for path, subdirs, files in os.walk('tmp'):
         for name in files:
             cpt += 1
     return cpt
 
 
-def nb_mail_annee(an):
-    cpt = 0;
+
+
+def nb_mail_annee(an, corpus):
+    cpt = 0
     for path, subdirs, files in os.walk('tmp'):
         for name in files:
             if path.split(clean.slash())[1] == an:
@@ -20,8 +24,10 @@ def nb_mail_annee(an):
     return cpt
 
 
-def nb_mail_adresse(ad):
-    cpt = 0;
+
+
+def nb_mail_adresse(ad, corpus):
+    cpt = 0
     for path, subdirs, files in os.walk('tmp'):
         for name in files:
             with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
@@ -33,8 +39,12 @@ def nb_mail_adresse(ad):
     return cpt
 
 
+
+
 def all_dates():
     return os.listdir('tmp')
+
+
 
 
 def all_adr():
@@ -51,6 +61,8 @@ def all_adr():
     return l
 
 
+
+
 def nb_mail(clef):
     nb_total = total_mail()
     res = ""
@@ -63,13 +75,42 @@ def nb_mail(clef):
     print("Nombre de mails de "+clef+" :",str(round(100*res/nb_total,1))+"%")
 
 
+
+
 def rapport_total():
     addrs = all_adr()
     ans = all_dates()
     nb_total = total_mail()
     #Création du fichier du rapport
     f = open("rapport complet", "w", encoding="utf-8", errors="surrogateescape") 
-    
+
+
+
+
+
+def main(corpus):
+  if corpus.strip() != "":
+    IDs = corpus.split(" ")
+    lenCorpus = len(corpus)
+  
+  #bon dabord faut convertir la liste mais oklm
+  # liste = ["dossier-num, dossier-num"]
+  # for elt in liste:
+      # fd = open("tmp/" + elt.split("-")[0] + "/" + elt.split("-")[1], "r", encoding="utf-8", errors="surrogateescape")
+  # merci d'utiliser 2 tab pour 1 indent
+  else:
+    True
+  
+  return True
+  
+
+
+
+corpus = "2015/1 2015/2 2015/3"
+main(corpus)
+
+
+'''
     for an in ans:
         nb_an = nb_mail_annee(an)
         f.write(an+" : "+str(round(100*nb_an/nb_total,1))+"%\n")
@@ -79,4 +120,4 @@ def rapport_total():
         f.write(addr+" : "+str(round(100*nb_adr/nb_total,1))+"%\n")
             
     f.close()
-
+'''

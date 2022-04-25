@@ -1,5 +1,6 @@
 import os
 import shutil
+from difflib import SequenceMatcher
 
 # Dictionnaire des caractères UTF-8 pour le réencodage
 utf_code = [ligne.split(":") for ligne in open("dico_utf8.txt", encoding="utf-8")]
@@ -61,7 +62,7 @@ def cutter() :
             for line in currentBigFile:
                 if(line.startswith("From - ") and writingState == 0):
                     try:
-                        mailFile.close() # Warning normal : faux positif - mytho va
+                        mailFile.close() # Warning normal : faux positif
                     except:
                         True
                     mailCount += 1
@@ -93,6 +94,9 @@ def cleaner() :
             currentFile = open("tmp/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
             for i in range(len(currentFile)):
                 ligne = currentFile[i]
+                for key, value in utf8Dico.items():
+                    if key in ligne:
+                        ligne = ligne.replace(key, value)
                 # Récupération de la date du mail
                 if (ligne.startswith('Date:')) and (dateEnvoi == "__Date__ "):
                     dateEnvoi += dateTranslation(ligne[6:])
@@ -126,7 +130,11 @@ def cleaner() :
                         objTMP = objTMP[1:]
                     if(objTMP.endswith(" ") or objTMP.endswith(" \n")) :
                         objTMP = objTMP[:-2]
+                    if(objTMP == "" or objTMP == " " or objTMP == "\n" or objTMP == " \n"):
+                        objTMP = "empty"
                     objet += objTMP.split("\n")[0]
+                    if(objet == "__Object__ " or objet == "__Object__ \n"):
+                        objet += "empty"
                 # Récupération de l'expéditeur
                 if (ligne.startswith('From:')) and (expediteur == "__From__ "):
                     expediteur = expediteur + ligne[ligne.find("<") + 1:ligne.find(">")]
@@ -153,7 +161,7 @@ def cleaner() :
                                 
                 # Récupération des pièces jointes
                 if (("name=\"") in ligne):
-                    pieceJ = pieceJ + ligne.split('=')[1] + " - "
+                    pieceJ = pieceJ + ligne.split('=')[1].strip("\n") + " - "
         
                 # Récupération du contenu
                 if ligne.startswith("Content-Type: text/plain;"):
@@ -205,7 +213,6 @@ def threader():
         for file in os.listdir("tmp/" + dossier):
             currentFile = open("tmp/" + dossier +"/"+ file, "r", encoding="utf-8", errors="surrogateescape").readlines()
             objet = currentFile[3][11:]
-            print("no "+ file + " obj "+ objet)
             try:
                 if(os.name == "posix"):
                     os.mkdir("threads/" + str(objet.replace("\n","")))
@@ -221,4 +228,17 @@ def threader():
             for line in currentFile:
                 newFile.write(line)
             newFile.close()
-                
+    for dossier in os.listdir("threads"):
+        for dossier2 in os.listdir("threads"):
+            if(dossier != dossier2):
+                s = SequenceMatcher(None, dossier, dossier2)
+                if(s.ratio() > 0.75):
+                    for mail in os.listdir("threads/"+dossier):
+                        fd = open("threads/" + dossier + "/" + mail, "r", encoding="utf-8", errors="surrogateescape").readlines()
+                        newFile = open("threads/" + dossier2 + "/" + mail, "w", encoding="utf-8", errors="surrogateescape")
+                        for line in fd:
+                            newFile.write(line)
+                        newFile.close()
+                        os.remove("threads/" + dossier + "/" + mail)
+                    os.rmdir("threads/" + dossier)
+

@@ -1,8 +1,5 @@
 import os
 
-
-import os
-
 def cleanScreen():
     OS = os.name
     if (OS == "nt"):

@@ -1,3 +1,4 @@
+
 import shutil
 from clean import cleanScreen
 import parser
@@ -5,7 +6,6 @@ import filter
 import responseTime
 import stat
 import os
-
 
 # ---------- Définition des fonctions ----------
 def affichageMail():
@@ -32,7 +32,7 @@ def affichageMailCorpus(corpus):
         nb_mail +=1
 
 def menuPrincipal():
-    cleanScreen()
+    8cleanScreen()
     print("\n -----------------------------\n Que voulez-vous faire ?\n -----------------------------\n 1. Afficher les mails\n 2. Filtrer les mails\n 3. Utiliser les fils de discussion\n 4. Quitter\n")
     choice = str(input("Votre choix : "))
     corpus = ""
@@ -46,10 +46,17 @@ def menuPrincipal():
         affichageMailCorpus(corpus)
     elif (choice == "3"):
         nb_fil = 0
+        print("Vous pouvez choisir le minimum de mails voulu par fil (0 sinon)\n")
+        min = input("Votre choix... ")
+        print("Vous pouvez choisir le maximum de mails voulu par fil (0 sinon)\n")
+        max = input("Votre choix... ")
         print("Affichage du corpus de mails :\n")
         for dossier in os.listdir("threads") :
             nb_fil +=1
-            print(str(nb_fil) + ". Objet: "+dossier)
+            if(int(max) == 0 and int(len(os.listdir("threads/"+dossier))) >= int(min)):
+                print(str(nb_fil) + ". Objet: "+dossier)
+            elif(int(len(os.listdir("threads/"+dossier))) >= int(min) and int(len(os.listdir("threads/"+dossier))) < int(max)):
+                print(str(nb_fil) + ". Objet: "+dossier)
         fils = os.listdir("threads")
         num_fil = int(input("Choisisez un fil... "))
         corpus = fils[num_fil-1]
