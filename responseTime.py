@@ -56,7 +56,7 @@ def main(corpus):
     graphTimes(arrayTimes)
     print("\nExporter ces résultats dans un fichier ? (o/n) ")
     choix = input()
-    if (choix in ["y","o","1"]) :
+    if (choix in ["y","Y","O","o","1"]) :
         resString = ""
         for i in arrayTimes :
             resString += i[0] + "\t" + str(i[1]) + "\n"

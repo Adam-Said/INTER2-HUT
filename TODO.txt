@@ -1,6 +1,15 @@
 🟨 1. Fonction stat complète (Gatien)
-🟥 2. Vérifier exports
-🟥 3. Ajouter lors de la création de threads des fonctions pour merge des objets si ils se ressemblent
+🟩 2. Vérifier exports
+🟩 3. Ajouter lors de la création de threads des fonctions pour merge des objets si ils se ressemblent
 🟥 4. Faire le rapport
 🟥 5. Mettre le rapport en Latex
 🟥 6. Diapo oral (on a large le temps)
+
+
+Et pourcentage ça renverrai dans le cas 1. :
+Tout : ce que t'as déjà fait + nombre qui ont des pièces jointes, nombre par groupes d'objets, pourcentage de mails par mois et par année
+Annee : ce que t'as deja fait + part des adresses + part de mails par mois + nombre de pj
+Adresse : nombre de mails envoyés + part par mois + nombre pj + part des personnes avec qui elle parle + longueur des mails
+
+Dans le cas 2. :
+Corpus : pourcentage par adresse + part par mois et année + nombre pj + longueur moyenne

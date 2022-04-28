@@ -1,4 +1,3 @@
-
 import shutil
 from clean import cleanScreen
 import parser
@@ -32,7 +31,7 @@ def affichageMailCorpus(corpus):
         nb_mail +=1
 
 def menuPrincipal():
-    8cleanScreen()
+    cleanScreen()
     print("\n -----------------------------\n Que voulez-vous faire ?\n -----------------------------\n 1. Afficher les mails\n 2. Filtrer les mails\n 3. Utiliser les fils de discussion\n 4. Quitter\n")
     choice = str(input("Votre choix : "))
     corpus = ""

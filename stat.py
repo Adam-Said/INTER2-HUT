@@ -1,5 +1,3 @@
-true = True
-false = False
 import os
 import clean
 
@@ -18,9 +16,13 @@ def total_mail():
 def nb_mail_annee(an, corpus):
     cpt = 0
     for path, subdirs, files in os.walk('tmp'):
-        for name in files:
-            if path.split(clean.slash())[1] == an:
-                cpt += 1
+        try:
+            doss = path.split(clean.slash())[1]
+            for name in files:
+                if doss == an and (corpus == [] or (os.path.join(doss,name) in corpus)):
+                    cpt += 1
+        except:
+            pass
     return cpt
 
 
@@ -29,13 +31,41 @@ def nb_mail_annee(an, corpus):
 def nb_mail_adresse(ad, corpus):
     cpt = 0
     for path, subdirs, files in os.walk('tmp'):
-        for name in files:
-            with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
-                for ligne in fd:
-                    if (ligne.startswith("__From__")):
-                        if ligne.split(" ")[1][:-1] == ad:
-                            cpt += 1
-                        break
+        try:
+            doss = path.split(clean.slash())[1]
+            for name in files:
+                if (corpus == [] or ((os.path.join(doss,name) in corpus))):
+                    with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
+                        for ligne in fd:
+                            if (ligne.startswith("__From__")):
+                                if ad in ligne.split(" ")[1]:
+                                    cpt += 1
+                                break
+        except:
+            pass
+    return cpt
+
+
+
+
+def nb_mail_pj(corpus):
+    cpt = 0
+    for path, subdirs, files in os.walk('tmp'):
+        try:
+            doss = path.split(clean.slash())[1]
+            for name in files:
+                if (corpus == [] or ((os.path.join(doss,name) in corpus))):
+                    with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
+                        for ligne in fd:
+                            if (ligne.startswith("__PJ__")):
+                                try:
+                                    ligne.split("-")[1]
+                                    cpt += 1
+                                except:
+                                    pass
+                                break
+        except:
+            pass
     return cpt
 
 
@@ -43,6 +73,7 @@ def nb_mail_adresse(ad, corpus):
 
 def all_dates():
     return os.listdir('tmp')
+
 
 
 
@@ -82,42 +113,46 @@ def rapport_total():
     ans = all_dates()
     nb_total = total_mail()
     #Création du fichier du rapport
-    f = open("rapport complet", "w", encoding="utf-8", errors="surrogateescape") 
+    f = open("rapport_complet.txt", "w", encoding="utf-8", errors="surrogateescape")
+    #rapport pour les années
+    f.write("Années :\n")
+    for an in ans:
+        nb_an = nb_mail_annee(an, [])
+        f.write(an+" : "+str(round(100*nb_an/nb_total,2))+"%\n")
+    f.write("Adresses :\n")
+    #rapport pour les adresses    
+    for addr in addrs:
+        nb_adr = nb_mail_adresse(addr, [])
+        f.write(addr+" : "+str(round(100*nb_adr/nb_total,2))+"%\n")
+    #rapport pour les pièces jointes
+    nb_pj = nb_mail_pj([])
+    f.write("Pièces jointes : "+str(round(100*nb_pj/nb_total,2))+"%")
+              
+    f.close()
+
 
 
 
 
 
 def main(corpus):
-  if corpus.strip() != "":
-    IDs = corpus.split(" ")
-    lenCorpus = len(corpus)
-  
-  #bon dabord faut convertir la liste mais oklm
-  # liste = ["dossier-num, dossier-num"]
+    if corpus.strip() != "":
+        IDs = corpus.split(" ")
+        lenCorpus = len(corpus)
+        print("Corpus :",IDs)
+        print("nb malo :",nb_mail_pj([]))
   # for elt in liste:
       # fd = open("tmp/" + elt.split("-")[0] + "/" + elt.split("-")[1], "r", encoding="utf-8", errors="surrogateescape")
-  # merci d'utiliser 2 tab pour 1 indent
-  else:
-    True
+      
+    else:
+        pass
   
-  return True
+    return True
   
 
 
 
-corpus = "2015/1 2015/2 2015/3"
+corpus = "2015/1 2015/2 2015/3 2015/14"
 main(corpus)
 
-
-'''
-    for an in ans:
-        nb_an = nb_mail_annee(an)
-        f.write(an+" : "+str(round(100*nb_an/nb_total,1))+"%\n")
-        
-    for addr in addrs:
-        nb_adr = nb_mail_adresse(addr)
-        f.write(addr+" : "+str(round(100*nb_adr/nb_total,1))+"%\n")
-            
-    f.close()
-'''
+rapport_total()

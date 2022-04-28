@@ -1,5 +1,6 @@
 import os
 import shutil
+import clean
 from difflib import SequenceMatcher
 
 # Dictionnaire des caractères UTF-8 pour le réencodage
@@ -51,12 +52,11 @@ def dateTranslation(date_input) : # Traduction des mois en lettres en chiffres
 def cutter() :
     for bigFile in os.listdir("__MAIL_DEPOT__"):
         try:
-            os.mkdir("tmp/" + str(bigFile))
+            os.mkdir("tmp" + clean.slash() + str(bigFile))
         except:
-            shutil.rmtree("tmp/" + str(bigFile))
-            os.mkdir("tmp/" + str(bigFile))
-            True
-        with open("__MAIL_DEPOT__/" + bigFile, encoding="utf-8", errors="surrogateescape") as currentBigFile:
+            shutil.rmtree("tmp" + clean.slash() + str(bigFile))
+            os.mkdir("tmp" + clean.slash() + str(bigFile))
+        with open("__MAIL_DEPOT__" + clean.slash() + bigFile, encoding="utf-8", errors="surrogateescape") as currentBigFile:
             mailCount = 0
             writingState = 0
             for line in currentBigFile:
@@ -64,15 +64,15 @@ def cutter() :
                     try:
                         mailFile.close() # Warning normal : faux positif
                     except:
-                        True
+                        pass
                     mailCount += 1
-                    mailFile = open("tmp/" + str(bigFile) + "/" + str(mailCount), "w",encoding="utf-8", errors="surrogateescape")
+                    mailFile = open("tmp" + clean.slash() + str(bigFile) + clean.slash() + str(mailCount), "w",encoding="utf-8", errors="surrogateescape")
                     writingState = 1
 
                 elif(line.startswith("From - ") and writingState == 1):
                     mailFile.close()
                     mailCount += 1
-                    mailFile = open("tmp/" + str(bigFile) + "/" + str(mailCount), "w", encoding="utf-8", errors="surrogateescape")
+                    mailFile = open("tmp" + clean.slash() + str(bigFile) + clean.slash() + str(mailCount), "w", encoding="utf-8", errors="surrogateescape")
                     writingState = 0
 
                 mailFile.write(line)
@@ -83,7 +83,7 @@ def cutter() :
 def cleaner() :
     for dossier in os.listdir("tmp"):
         mailCount = 0
-        for file in os.listdir("tmp/" + dossier):
+        for file in os.listdir("tmp" + clean.slash() + dossier):
             mailCount += 1
             dateEnvoi = "__Date__ "
             expediteur = "__From__ "
@@ -91,7 +91,7 @@ def cleaner() :
             objet = "__Object__ "
             pieceJ = "__PJ__ "
             content = "__CONTENT__ "
-            currentFile = open("tmp/" + dossier +"/"+ file, encoding="utf-8", errors="surrogateescape").readlines()
+            currentFile = open("tmp" + clean.slash() + dossier + clean.slash() + file, encoding="utf-8", errors="surrogateescape").readlines()
             for i in range(len(currentFile)):
                 ligne = currentFile[i]
                 for key, value in utf8Dico.items():
@@ -133,7 +133,8 @@ def cleaner() :
                     if(objTMP == "" or objTMP == " " or objTMP == "\n" or objTMP == " \n"):
                         objTMP = "empty"
                     objet += objTMP.split("\n")[0]
-                    if(objet == "__Object__ " or objet == "__Object__ \n"):
+                    print("obj =",objTMP,"découpé =",objTMP.split("\n")[0])
+                    if(objet.strip() == "__Object__" or objet == "__Object__ \n"):
                         objet += "empty"
                 # Récupération de l'expéditeur
                 if (ligne.startswith('From:')) and (expediteur == "__From__ "):
@@ -183,7 +184,7 @@ def cleaner() :
                                 content += currentFile[j][:-1]
                             j += 1 
 
-            os.remove("tmp/" + dossier +"/"+ file)
+            os.remove("tmp" + clean.slash() + dossier + clean.slash() + file)
             content = content.split("\n")
             newContent = ""
             for i in range(len(content)):
@@ -201,7 +202,7 @@ def cleaner() :
             mailArray.append(objet + "\n")
             mailArray.append(pieceJ + "\n")
             mailArray.append(newContent)
-            newMail = open("tmp/" + dossier +"/"+ file, "w", encoding="utf-8", errors="surrogateescape")
+            newMail = open("tmp" + clean.slash() + dossier + clean.slash() + file, "w", encoding="utf-8", errors="surrogateescape")
             for line in mailArray:
                 newMail.write(line)
             newMail.close()
@@ -210,21 +211,18 @@ def cleaner() :
 
 def threader():
     for dossier in os.listdir("tmp"):
-        for file in os.listdir("tmp/" + dossier):
-            currentFile = open("tmp/" + dossier +"/"+ file, "r", encoding="utf-8", errors="surrogateescape").readlines()
+        for file in os.listdir("tmp" + clean.slash() + dossier):
+            currentFile = open("tmp" + clean.slash() + dossier + clean.slash() + file, "r", encoding="utf-8", errors="surrogateescape").readlines()
             objet = currentFile[3][11:]
             try:
-                if(os.name == "posix"):
-                    os.mkdir("threads/" + str(objet.replace("\n","")))
-                else:
-                    os.mkdir("threads\\" + str(objet.replace("\n","")))
+                os.mkdir("threads" + clean.slash() + str(objet.replace("\n","")))
             except:
-                True
+                pass
             fullDateTime = currentFile[0][9:].split(" ")
             date = fullDateTime[0].split("/")
             time = fullDateTime[1].split(":")
             dateTime = str(date[2] + "_" + date[1] + "_" + date[0] + "-" + time[0] + "_" + time[1] + "_" + time[2])
-            newFile = open("threads/" + str(objet.replace("\n","")) + "/" + str(dateTime.replace("\n","")), "w", encoding="utf-8", errors="surrogateescape")
+            newFile = open("threads" + clean.slash() + str(objet.replace("\n","")) + clean.slash() + str(dateTime.replace("\n","")), "w", encoding="utf-8", errors="surrogateescape")
             for line in currentFile:
                 newFile.write(line)
             newFile.close()
@@ -233,12 +231,12 @@ def threader():
             if(dossier != dossier2):
                 s = SequenceMatcher(None, dossier, dossier2)
                 if(s.ratio() > 0.75):
-                    for mail in os.listdir("threads/"+dossier):
-                        fd = open("threads/" + dossier + "/" + mail, "r", encoding="utf-8", errors="surrogateescape").readlines()
-                        newFile = open("threads/" + dossier2 + "/" + mail, "w", encoding="utf-8", errors="surrogateescape")
+                    for mail in os.listdir("threads" + clean.slash() + dossier):
+                        fd = open("threads" + clean.slash() + dossier + clean.slash() + mail, "r", encoding="utf-8", errors="surrogateescape").readlines()
+                        newFile = open("threads" + clean.slash() + dossier2 + clean.slash() + mail, "w", encoding="utf-8", errors="surrogateescape")
                         for line in fd:
                             newFile.write(line)
                         newFile.close()
-                        os.remove("threads/" + dossier + "/" + mail)
-                    os.rmdir("threads/" + dossier)
+                        os.remove("threads" + clean.slash() + dossier + clean.slash() + mail)
+                    os.rmdir("threads" + clean.slash() + dossier)
 
