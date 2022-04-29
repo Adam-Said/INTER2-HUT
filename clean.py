@@ -1,16 +1,22 @@
 import os
 
 def cleanScreen():
-    OS = os.name
-    if (OS == "nt"):
+    if (os.name == "nt"):
         os.system('cls')
-    elif (OS == "posix"):
+    elif (os.name == "posix"):
         os.system("clear")
 
 
 def slash():
-    OS = os.name
-    if (OS == "nt"):
+    if (os.name == "nt"):
         return "\\"
-    elif (OS == "posix"):
+    elif (os.name == "posix"):
         return "/"
+
+
+def progress(nb, max, message):
+    if max > 0:
+        progress = (nb/max)
+        if int(progress*100) - progress*100 <= progress - 1:
+            cleanScreen()
+            print(message, str(int(progress*100)) + "%")

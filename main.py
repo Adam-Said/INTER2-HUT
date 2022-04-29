@@ -3,7 +3,7 @@ from clean import cleanScreen
 import parser
 import filter
 import responseTime
-import stat
+import statistique as stat
 import os
 
 # ---------- Définition des fonctions ----------
@@ -32,7 +32,7 @@ def affichageMailCorpus(corpus):
 
 def menuPrincipal():
     cleanScreen()
-    print("\n -----------------------------\n Que voulez-vous faire ?\n -----------------------------\n 1. Afficher les mails\n 2. Filtrer les mails\n 3. Utiliser les fils de discussion\n 4. Quitter\n")
+    print("-----------------------------\n Que voulez-vous faire ?\n -----------------------------\n 1. Afficher les mails\n 2. Filtrer les mails\n 3. Utiliser les fils de discussion\n 4. Quitter\n")
     choice = str(input("Votre choix : "))
     corpus = ""
     if (choice == "1"):
@@ -84,16 +84,17 @@ def menuPrincipal():
 
 def menuAction(corpus):
     while True:
-        print("\n-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Calcul du temps de réponse\n 2. Calcul de la longueur des mails\n 3. Statistiques sur les mails\n 4. Quitter\n")
+        print("-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Calcul du temps de réponse\n 2. Calcul de la longueur des mails\n 3. Statistiques sur les mails\n 4. Quitter\n")
         action = input("Votre choix : ")
         if (action == "1"):
             if(not(corpus.split(" ")[0].split("-")[0].isnumeric())):
-              print("Temps de réponse\n")
-              responseTime.main(corpus)
+                print("Temps de réponse\n")
+                responseTime.main(corpus)
             else:
-              print("Le calcul du temps de réponse est calculable uniquement sur les fils de discussions.\n")
+                print("Le calcul du temps de réponse est calculable uniquement sur les fils de discussions.\n")
         elif (action == "2"):
             print("Longueur de mails\n")
+            #responseTime.main(corpus)
             break
         elif (action == "3"):
             print("Statistiques sur les mails\n")
@@ -102,8 +103,9 @@ def menuAction(corpus):
             print("------ Fin ------")
             break
         else:
-            print("Cette option n'existe pas")
             cleanScreen()
+            print("Cette option n'existe pas")
+            
       
 def main() :
     cleanScreen()
@@ -113,13 +115,11 @@ def main() :
     try:
         os.mkdir("__MAIL_DEPOT__")
     except:
-        print("Dossier __MAIL_DEPOT__ existant")
-        True
+        pass
     
     try:
         os.mkdir("tmp")
     except:
-        print("Dossier tmp existant")
         shutil.rmtree("tmp")
         os.mkdir("tmp")
         True
@@ -127,7 +127,6 @@ def main() :
     try:
         os.mkdir("threads")
     except:
-        print("Dossier threads existant")
         shutil.rmtree("threads")
         os.mkdir("threads")
         True

@@ -58,22 +58,14 @@ def cutter() :
             os.mkdir("tmp" + clean.slash() + str(bigFile))
         with open("__MAIL_DEPOT__" + clean.slash() + bigFile, encoding="utf-8", errors="surrogateescape") as currentBigFile:
             mailCount = 0
-            writingState = 0
             for line in currentBigFile:
-                if(line.startswith("From - ") and writingState == 0):
+                if(line.startswith("From - ")):
                     try:
                         mailFile.close() # Warning normal : faux positif
                     except:
                         pass
                     mailCount += 1
                     mailFile = open("tmp" + clean.slash() + str(bigFile) + clean.slash() + str(mailCount), "w",encoding="utf-8", errors="surrogateescape")
-                    writingState = 1
-
-                elif(line.startswith("From - ") and writingState == 1):
-                    mailFile.close()
-                    mailCount += 1
-                    mailFile = open("tmp" + clean.slash() + str(bigFile) + clean.slash() + str(mailCount), "w", encoding="utf-8", errors="surrogateescape")
-                    writingState = 0
 
                 mailFile.write(line)
             mailFile.close()
@@ -81,10 +73,16 @@ def cutter() :
 
 
 def cleaner() :
+    #compte du nombre de mails totaux
+    nb_mails = 0
+    for path in os.listdir("tmp"):
+        nb_mails += len(os.listdir(os.path.join("tmp", path)))
+    #début du nétoyage des fichiers
     for dossier in os.listdir("tmp"):
         mailCount = 0
         for file in os.listdir("tmp" + clean.slash() + dossier):
             mailCount += 1
+            clean.progress(mailCount, nb_mails, "Nétoyage des mails")
             dateEnvoi = "__Date__ "
             expediteur = "__From__ "
             destinataire = "__To__ "
@@ -133,9 +131,9 @@ def cleaner() :
                     if(objTMP == "" or objTMP == " " or objTMP == "\n" or objTMP == " \n"):
                         objTMP = "empty"
                     objet += objTMP.split("\n")[0]
-                    print("obj =",objTMP,"découpé =",objTMP.split("\n")[0])
+                    '''print(objet)
                     if(objet.strip() == "__Object__" or objet == "__Object__ \n"):
-                        objet += "empty"
+                        objet += "empty"'''
                 # Récupération de l'expéditeur
                 if (ligne.startswith('From:')) and (expediteur == "__From__ "):
                     expediteur = expediteur + ligne[ligne.find("<") + 1:ligne.find(">")]
@@ -215,7 +213,10 @@ def threader():
             currentFile = open("tmp" + clean.slash() + dossier + clean.slash() + file, "r", encoding="utf-8", errors="surrogateescape").readlines()
             objet = currentFile[3][11:]
             try:
-                os.mkdir("threads" + clean.slash() + str(objet.replace("\n","")))
+                if (objet != "") and (objet.strip != "\n"):
+                    os.mkdir("threads" + clean.slash() + str(objet.replace("\n","")))
+                else:
+                    os.mkdir("threads" + clean.slash() + "empty")
             except:
                 pass
             fullDateTime = currentFile[0][9:].split(" ")
@@ -226,17 +227,30 @@ def threader():
             for line in currentFile:
                 newFile.write(line)
             newFile.close()
+
+    cpt = 0
+    total = len(os.listdir("threads"))
     for dossier in os.listdir("threads"):
-        for dossier2 in os.listdir("threads"):
-            if(dossier != dossier2):
-                s = SequenceMatcher(None, dossier, dossier2)
-                if(s.ratio() > 0.75):
-                    for mail in os.listdir("threads" + clean.slash() + dossier):
-                        fd = open("threads" + clean.slash() + dossier + clean.slash() + mail, "r", encoding="utf-8", errors="surrogateescape").readlines()
-                        newFile = open("threads" + clean.slash() + dossier2 + clean.slash() + mail, "w", encoding="utf-8", errors="surrogateescape")
-                        for line in fd:
-                            newFile.write(line)
-                        newFile.close()
-                        os.remove("threads" + clean.slash() + dossier + clean.slash() + mail)
-                    os.rmdir("threads" + clean.slash() + dossier)
+        cpt += 1
+        clean.progress(cpt, total, "Création des threads de messages")
+        path = "threads" + clean.slash() + dossier
+        if os.path.isfile(path):
+            os.remove(path)
+        else:
+            for dossier2 in os.listdir("threads"):
+                path2 = "threads" + clean.slash() + dossier2
+                if os.path.isfile(path2):
+                    os.remove(path2)
+                else:
+                    if(dossier != dossier2):
+                        if(SequenceMatcher(None, dossier, dossier2).ratio() > 0.75):
+                            for mail in os.listdir(path):
+                                fd = open(path + clean.slash() + mail, "r", encoding="utf-8", errors="surrogateescape").readlines()
+                                newFile = open(path2 + clean.slash() + mail, "w", encoding="utf-8", errors="surrogateescape")
+                                for line in fd:
+                                    newFile.write(line)
+                                newFile.close()
+                                os.remove(path + clean.slash() + mail)
+                            os.rmdir(path)
+                            break
 

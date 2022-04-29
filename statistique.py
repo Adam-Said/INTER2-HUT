@@ -136,23 +136,40 @@ def rapport_total():
 
 
 def main(corpus):
-    if corpus.strip() != "":
-        IDs = corpus.split(" ")
-        lenCorpus = len(corpus)
-        print("Corpus :",IDs)
-        print("nb malo :",nb_mail_pj([]))
-  # for elt in liste:
-      # fd = open("tmp/" + elt.split("-")[0] + "/" + elt.split("-")[1], "r", encoding="utf-8", errors="surrogateescape")
+    clean.cleanScreen()
+    while True:
+        print("-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Statistiques sur le corpus\n 2. Statistiques sur l'ensemble des mails\n 3. Quitter\n")
+        action = input("Votre choix : ")
+        if (action == "1"):
+            print("-----------------------------\nStatistiques sur le corpus\n-----------------------------\n 1. Chercher une adresse mail\n 2. Chercher une année\n 3. Chercher des pièces jointes\n 4. Quitter\n")
+            action2 = input("Votre choix : ")
+            if (action2 == "1" or action2 == "2"):
+                True
+        elif (action == "2"):
+            True
+        elif (action == "3"):
+            exit(1)
+        else:
+            clean.cleanScreen()
+            print("Cette option n'existe pas")
+              
+        if corpus.strip() != "":
+            IDs = corpus.split(" ")
+            lenCorpus = len(corpus)
+            print("Corpus :",IDs)
+            print("nb malo :",nb_mail_pj([]))
+      # for elt in liste:
+          # fd = open("tmp/" + elt.split("-")[0] + "/" + elt.split("-")[1], "r", encoding="utf-8", errors="surrogateescape")
+          
+        else:
+            pass
       
-    else:
-        pass
-  
-    return True
+        return True
   
 
 
 
-corpus = "2015/1 2015/2 2015/3 2015/14"
-main(corpus)
+#corpus = "2015/1 2015/2 2015/3 2015/14"
+#main(corpus)
 
-rapport_total()
+#rapport_total()

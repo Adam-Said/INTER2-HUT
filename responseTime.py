@@ -58,10 +58,9 @@ def main(corpus):
     choix = input()
     if (choix in ["y","Y","O","o","1"]) :
         resString = ""
-        for i in arrayTimes :
-            resString += i[0] + "\t" + str(i[1]) + "\n"
+        for temps in arrayTimes :
+            resString += temps[0] + "\t" + str(temps[1]) + "\n"
         text_file = open(corpus+".txt", "w", encoding="utf-8", errors="surrogateescape")
         text_file.write(resString)
         text_file.close()
         print("Données exportées avec succès")
-    return 1
