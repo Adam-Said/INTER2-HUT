@@ -138,18 +138,17 @@ def rapport_total():
 def main(corpus):
     clean.cleanScreen()
     while True:
-        print("-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Statistiques sur le corpus\n 2. Statistiques sur l'ensemble des mails\n 3. Quitter\n")
+        print("-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Statistiques sur le corpus\n 2. Générer un rapport complet\n 3. Quitter\n")
         action = input("Votre choix : ")
         if (action == "1"):
-            print("-----------------------------\nStatistiques sur le corpus\n-----------------------------\n 1. Chercher une adresse mail\n 2. Chercher une année\n 3. Chercher des pièces jointes\n 4. Quitter\n")
-            action2 = input("Votre choix : ")
-            if (action2 == "1" or action2 == "2"):
-                True
-        elif (action == "2"):
-            True
-        elif (action == "3"):
+            
+        elif (action == "2"): #rapport complet
+            rapport_total()
+            print("rapport complet généré")
+            break
+        elif (action == "3"): #sortie
             exit(1)
-        else:
+        else: #autre choix
             clean.cleanScreen()
             print("Cette option n'existe pas")
               

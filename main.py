@@ -3,7 +3,7 @@ from clean import cleanScreen
 import parser
 import filter
 import responseTime
-import statistique as stat
+import statistique
 import os
 
 # ---------- Définition des fonctions ----------
@@ -100,7 +100,7 @@ def menuAction(corpus):
             break
         elif (action == "3"):
             print("Statistiques sur les mails\n")
-            stat.main(corpus)
+            statistique.main(corpus)
         elif (action == "4"):
             print("------ Fin ------")
             break
