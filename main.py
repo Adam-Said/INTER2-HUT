@@ -43,6 +43,7 @@ def menuPrincipal():
         corpus = filter.main()
         print("Affichage du corpus de mails sélectionné :\n")
         affichageMailCorpus(corpus)
+        print(corpus)
     elif (choice == "3"):
         nb_fil = 0
         print("Vous pouvez choisir le minimum de mails voulu par fil (0 sinon)\n")
@@ -68,6 +69,7 @@ def menuPrincipal():
             exped = current_file[1][9:]
             date = current_file[0][9:]
             print(str(nb_mail)+". Objet : "+obj+" De : "+exped + " Date : "+date)
+            print(type(corpus))
     else:
         try:
             shutil.rmtree("tmp")
