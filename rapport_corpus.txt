@@ -1,0 +1,16 @@
+Années :
+100.0% 2015
+
+Adresses du corpus :
+13.04% alain.foucaran@ies.univ-montp2.fr
+17.39% julien.mary@msh-m.org
+17.39% sophie.belacel@msh-m.org
+8.7% lamshm@msh-m.org
+
+Adresses au sein corpus :
+25.0% alain.foucaran@ies.univ-montp2.fr
+25.0% julien.mary@msh-m.org
+25.0% lamshm@msh-m.org
+25.0% sophie.belacel@msh-m.org
+
+17.39% de pièces jointes

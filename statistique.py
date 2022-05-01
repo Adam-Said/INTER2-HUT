@@ -71,28 +71,35 @@ def nb_mail_pj(corpus):
 
 
 
-def all_dates():
-    return os.listdir('tmp')
+def all_dates(corpus):
+    if corpus == []:
+        return os.listdir('tmp')
+    else:
+        l = []
+        ans = os.listdir('tmp')
+        for an in corpus:
+            if (an[:4] in ans) and (an[:4] not in l):
+                l.append(an[:4])
+        return l
 
 
 
 
-
-def all_adr():
+def all_adr(corpus):
     l = []
     for path, subdirs, files in os.walk('tmp'):
         for name in files:
-            with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
-                for ligne in fd:
-                    if (ligne.startswith("__From__")):
-                        adr = ligne.split(" ")[1][:-1]
-                        if not(adr in l):
-                            l.append(adr)
-                        break
+            if (corpus == []) or (os.path.join(path[4:], name) in corpus):
+                with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
+                    for ligne in fd:
+                        if (ligne.startswith("__From__")):
+                            adr = ligne.split(" ")[1][:-1]
+                            if not(adr in l):
+                                l.append(adr)
+                            break
     return l
 
-
-
+  
 
 def nb_mail(clef):
     nb_total = total_mail()
@@ -108,29 +115,77 @@ def nb_mail(clef):
 
 
 
-def rapport_total():
-    addrs = all_adr()
-    ans = all_dates()
-    nb_total = total_mail()
-    #Création du fichier du rapport
-    f = open("rapport_complet.txt", "w", encoding="utf-8", errors="surrogateescape")
-    #rapport pour les années
-    f.write("Années :\n")
-    for an in ans:
-        nb_an = nb_mail_annee(an, [])
-        f.write(an+" : "+str(round(100*nb_an/nb_total,2))+"%\n")
-    f.write("Adresses :\n")
-    #rapport pour les adresses    
-    for addr in addrs:
-        nb_adr = nb_mail_adresse(addr, [])
-        f.write(addr+" : "+str(round(100*nb_adr/nb_total,2))+"%\n")
-    #rapport pour les pièces jointes
-    nb_pj = nb_mail_pj([])
-    f.write("Pièces jointes : "+str(round(100*nb_pj/nb_total,2))+"%")
-              
-    f.close()
+def rapport_total(corpus):
+    if corpus.strip() == "":
+        addrs = all_adr([])
+        ans = all_dates([])
+        nb_total = total_mail()
+        #Création du fichier du rapport
+        f = open("rapport_complet.txt", "w", encoding="utf-8", errors="surrogateescape")
+        #rapport pour les années
+        f.write("\nAnnées :\n")
+        tab = []
+        for an in ans:
+            nb_an = nb_mail_annee(an, [])
+            tab.append(str(round(100*nb_an/nb_total,2))+"% "+an+"\n") 
+        tab.sort()
+        for ligne in tab:
+            f.write(ligne)
+        #rapport pour les adresses  
+        f.write("\nAdresses :\n")
+        tab = []
+        for addr in addrs:
+            nb_adr = nb_mail_adresse(addr, [])
+            tab.append(str(round(100*nb_adr/nb_total,2))+"% "+addr+"\n")
+        tab.sort()
+        for ligne in tab:
+            f.write(ligne)
+        #rapport pour les pièces jointes
+        nb_pj = nb_mail_pj([])
+        f.write("\n"+str(round(100*nb_pj/nb_total,2))+"% de pièces jointes")
+                  
+        f.close()
 
-
+    else: #si on a passé un corpus en paramètres
+        IDs = corpus.split(" ")
+        nb_corpus = len(IDs)
+        addrs = all_adr(IDs)
+        ans = all_dates(IDs)
+        nb_total = total_mail()
+        #Création du fichier du rapport
+        f = open("rapport_corpus.txt", "w", encoding="utf-8", errors="surrogateescape")
+        #rapport pour les années
+        f.write("Années :\n")
+        tab = []
+        for an in ans:
+            nb_an = nb_mail_annee(an, corpus)
+            tab.append(str(round(100*nb_an/nb_corpus,2))+"% "+an+"\n") 
+        tab.sort()
+        for ligne in tab:
+            f.write(ligne)
+        #rapport pour les adresses  
+        f.write("\nAdresses du corpus :\n")  
+        tab = []
+        for addr in addrs:
+            nb_adr = nb_mail_adresse(addr, [])
+            tab.append(str(round(100*nb_adr/nb_total,2))+"% "+addr+"\n")
+        tab.sort()
+        for ligne in tab:
+            f.write(ligne)
+        #rapport pour les adresses 
+        f.write("\nAdresses au sein corpus :\n")
+        tab = []
+        for addr in addrs:
+            nb_adr = nb_mail_adresse(addr, corpus)
+            tab.append(str(round(100*nb_adr/nb_corpus,2))+"% "+addr+"\n")
+        tab.sort()
+        for ligne in tab:
+            f.write(ligne)
+        #rapport pour les pièces jointes
+        nb_pj = nb_mail_pj(corpus)
+        f.write("\n"+str(round(100*nb_pj/nb_total,2))+"% de pièces jointes")
+                  
+        f.close()
 
 
 
@@ -141,34 +196,23 @@ def main(corpus):
         print("-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Statistiques sur le corpus\n 2. Générer un rapport complet\n 3. Quitter\n")
         action = input("Votre choix : ")
         if (action == "1"):
-            
+            rapport_total(corpus)
+            print("rapport_corpus.txt généré")
+            break
         elif (action == "2"): #rapport complet
-            rapport_total()
-            print("rapport complet généré")
+            rapport_total("")
+            print("rapport_complet.txt généré")
             break
         elif (action == "3"): #sortie
             exit(1)
         else: #autre choix
             clean.cleanScreen()
             print("Cette option n'existe pas")
-              
-        if corpus.strip() != "":
-            IDs = corpus.split(" ")
-            lenCorpus = len(corpus)
-            print("Corpus :",IDs)
-            print("nb malo :",nb_mail_pj([]))
-      # for elt in liste:
-          # fd = open("tmp/" + elt.split("-")[0] + "/" + elt.split("-")[1], "r", encoding="utf-8", errors="surrogateescape")
-          
-        else:
-            pass
-      
-        return True
-  
 
 
 
-#corpus = "2015/1 2015/2 2015/3 2015/14"
-#main(corpus)
+
+corpus = "2015/1 2015/2 2015/3 2015/14"
+main(corpus)
 
 #rapport_total()

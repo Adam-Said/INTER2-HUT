@@ -3,7 +3,11 @@
 🟩 3. Ajouter lors de la création de threads des fonctions pour merge des objets si ils se ressemblent
 🟥 4. Faire le rapport
 🟥 5. Mettre le rapport en Latex
-🟥 6. Diapo oral (on a large le temps)
+🟥 6. Diapo oral
+
+Stats :
+rapport total sur le corpus
+doc pour infos
 
 
 Et pourcentage ça renverrai dans le cas 1. :
