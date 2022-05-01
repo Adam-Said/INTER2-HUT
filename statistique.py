@@ -1,6 +1,6 @@
 import os
 import clean
-
+import operator
 
 
 def total_mail():
@@ -85,6 +85,25 @@ def all_dates(corpus):
 
 
 
+def nb_par_mois(corpus):
+    tab_mois = [0 for i in range(12)]
+    for path, subdirs, files in os.walk('tmp'):
+        try:
+            doss = path.split(clean.slash())[1]
+            for name in files:
+                if (corpus == [] or ((os.path.join(doss,name) in corpus))):
+                    with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
+                        print(fd[1][12:15])
+                        #tab_mois[fd[1][12:15]] += 1
+        except:
+            pass
+    return tab_mois
+
+
+print(nb_par_mois([]))
+input()
+
+
 def all_adr(corpus):
     l = []
     for path, subdirs, files in os.walk('tmp'):
@@ -101,16 +120,6 @@ def all_adr(corpus):
 
   
 
-def nb_mail(clef):
-    nb_total = total_mail()
-    res = ""
-    try:
-        int(clef)
-        res = nb_mail_annee(clef)
-    except:
-        res = nb_mail_adresse(clef)
-        
-    print("Nombre de mails de "+clef+" :",str(round(100*res/nb_total,1))+"%")
 
 
 
@@ -124,22 +133,20 @@ def rapport_total(corpus):
         f = open("rapport_complet.txt", "w", encoding="utf-8", errors="surrogateescape")
         #rapport pour les années
         f.write("\nAnnées :\n")
-        tab = []
+        tab = {}
         for an in ans:
             nb_an = nb_mail_annee(an, [])
-            tab.append(str(round(100*nb_an/nb_total,2))+"% "+an+"\n") 
-        tab.sort()
-        for ligne in tab:
-            f.write(ligne)
+            tab[an] = round(100*nb_an/nb_total,2)
+        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+            f.write(str(v) + "% " + k + "\n")
         #rapport pour les adresses  
         f.write("\nAdresses :\n")
-        tab = []
+        tab = {}
         for addr in addrs:
             nb_adr = nb_mail_adresse(addr, [])
-            tab.append(str(round(100*nb_adr/nb_total,2))+"% "+addr+"\n")
-        tab.sort()
-        for ligne in tab:
-            f.write(ligne)
+            tab[addr] = round(100*nb_adr/nb_total,2)
+        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+            f.write(str(v) + "% " + k + "\n")
         #rapport pour les pièces jointes
         nb_pj = nb_mail_pj([])
         f.write("\n"+str(round(100*nb_pj/nb_total,2))+"% de pièces jointes")
@@ -156,31 +163,28 @@ def rapport_total(corpus):
         f = open("rapport_corpus.txt", "w", encoding="utf-8", errors="surrogateescape")
         #rapport pour les années
         f.write("Années :\n")
-        tab = []
+        tab = {}
         for an in ans:
             nb_an = nb_mail_annee(an, corpus)
-            tab.append(str(round(100*nb_an/nb_corpus,2))+"% "+an+"\n") 
-        tab.sort()
-        for ligne in tab:
-            f.write(ligne)
+            tab[an] = round(100*nb_an/nb_corpus,2)
+        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+            f.write(str(v) + "% " + k + "\n")
         #rapport pour les adresses  
         f.write("\nAdresses du corpus :\n")  
-        tab = []
+        tab = {}
         for addr in addrs:
             nb_adr = nb_mail_adresse(addr, [])
-            tab.append(str(round(100*nb_adr/nb_total,2))+"% "+addr+"\n")
-        tab.sort()
-        for ligne in tab:
-            f.write(ligne)
+            tab[addr] = round(100*nb_adr/nb_total,2)
+        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+            f.write(str(v) + "% " + k + "\n")
         #rapport pour les adresses 
         f.write("\nAdresses au sein corpus :\n")
-        tab = []
+        tab = {}
         for addr in addrs:
             nb_adr = nb_mail_adresse(addr, corpus)
-            tab.append(str(round(100*nb_adr/nb_corpus,2))+"% "+addr+"\n")
-        tab.sort()
-        for ligne in tab:
-            f.write(ligne)
+            tab[addr] = round(100*nb_adr/nb_corpus,2)
+        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+            f.write(str(v) + "% " + k + "\n")
         #rapport pour les pièces jointes
         nb_pj = nb_mail_pj(corpus)
         f.write("\n"+str(round(100*nb_pj/nb_total,2))+"% de pièces jointes")
@@ -214,5 +218,6 @@ def main(corpus):
 
 corpus = "2015/1 2015/2 2015/3 2015/14"
 main(corpus)
+
 
 #rapport_total()
