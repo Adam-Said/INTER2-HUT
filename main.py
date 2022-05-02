@@ -97,7 +97,7 @@ def menuAction(corpus):
         print("-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Calcul du temps de réponse\n 2. Calcul de la longueur des mails\n 3. Statistiques sur les mails\n 4. Quitter\n")
         action = input("Votre choix : ")
         if (action == "1"):
-            if(not(corpus.split(" ")[0].split("-")[0].isnumeric())):
+            if(set('abcdefghijklmnopqrstuvwxyz').intersection(corpus)):
                 print("Temps de réponse\n")
                 responseTime.main(corpus)
             else:

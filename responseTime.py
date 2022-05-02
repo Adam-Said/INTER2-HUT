@@ -57,10 +57,10 @@ def main(corpus):
     print("\nExporter ces résultats dans un fichier ? (o/n) ")
     choix = input()
     if (choix in ["y","Y","O","o","1"]) :
-        resString = ""
+        resString = "sep=;\nadresse;date;heure\n"
         for temps in arrayTimes :
-            resString += temps[0] + "\t" + str(temps[1]) + "\n"
-        text_file = open("rapport_"+corpus+".txt", "w", encoding="utf-8", errors="surrogateescape")
+            resString += temps[0] + ";" + (str(temps[1])).split(" ")[0] + ";" + (str(temps[1])).split(" ")[1] + "\n"
+        text_file = open("rapport_"+corpus+".csv", "w", encoding="utf-8", errors="surrogateescape")
         text_file.write(resString)
         text_file.close()
         print("Données exportées avec succès")
