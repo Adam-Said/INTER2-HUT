@@ -44,7 +44,6 @@ def menuPrincipal():
         corpus = filter.main()
         print("Affichage du corpus de mails sélectionné :\n")
         affichageMailCorpus(corpus)
-        print(corpus)
     elif (choice == "3"):
         nb_fil = 0
         print("Vous pouvez choisir le minimum de mails voulu par fil (0 sinon)\n")
@@ -75,7 +74,7 @@ def menuPrincipal():
         valider = input("[o/n] : ")
         if valider in ["y","Y","O","o"]:
             print("création du rapport sur le corpus...")
-            rapport_total("")
+            statistique.rapport_total("")
             print("rapport_corpus.txt généré")
     else:
         try:

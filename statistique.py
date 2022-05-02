@@ -240,7 +240,7 @@ def rapport_total(corpus):
         f.close()
 
     else: #si on a passé un corpus en paramètres
-        IDs = corpus.split(" ")
+        IDs = (corpus.replace("-","/")).split(" ")[:-1]
         nb_corpus = len(IDs)
         addrs = all_adr(IDs)
         ans = all_dates(IDs)

@@ -60,7 +60,7 @@ def main(corpus):
         resString = ""
         for temps in arrayTimes :
             resString += temps[0] + "\t" + str(temps[1]) + "\n"
-        text_file = open(corpus+".txt", "w", encoding="utf-8", errors="surrogateescape")
+        text_file = open("rapport_"+corpus+".txt", "w", encoding="utf-8", errors="surrogateescape")
         text_file.write(resString)
         text_file.close()
         print("Données exportées avec succès")
