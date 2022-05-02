@@ -13,4 +13,14 @@ Adresses au sein corpus :
 25.0% sophie.belacel@msh-m.org
 25.0% julien.mary@msh-m.org
 
+Mois :
+50.0% Janvier
+25.0% Mars
+25.0% Decembre
+
+Semaine :
+50.0% Mardi
+25.0% Lundi
+25.0% Vendredi
+
 17.39% de pièces jointes

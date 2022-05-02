@@ -13,26 +13,35 @@ def main(corpus):
             arrayValue = []
             if adresse in tabAdresses.items():
                 cpt = tabAdresses.get(adresse)[0]
-                arrayValue.append(cpt+1, (tabAdresses.get(adresse)[1] + length)/ (cpt+1))
+                arrayValue.append(cpt+1)
+                arrayValue.append((tabAdresses.get(adresse)[1] + length)/ (cpt+1))
                 tabAdresses[adresse] = arrayValue
             else:
-                arrayValue.append(0, length)
-                tabAdresses.add(adresse, length)
+                arrayValue.append(0)
+                arrayValue.append(length)
+                tabAdresses[adresse] = arrayValue
               
     else: # corpus de mails différents
         corpus = corpus.split(" ")
+        corpus = list(filter(None, corpus))
         for doss in corpus:
-            mail = doss.split("/")
+            mail = doss.split("-")
             file = open("tmp/" + mail[0] +"/"+ mail[1], encoding="utf-8", errors="surrogateescape").readlines()
             adresse = file[1][9:]
             length = len(file) - 6
             arrayValue = []
             if adresse in tabAdresses.items():
                 cpt = tabAdresses.get(adresse)[0]
-                arrayValue.append(cpt+1, (tabAdresses.get(adresse)[1] + length)/ (cpt+1))
+                arrayValue.append(cpt+1)
+                arrayValue.append((tabAdresses.get(adresse)[1] + length)/ (cpt+1))
                 tabAdresses[adresse] = arrayValue
             else:
-                arrayValue.append(0, length)
-                tabAdresses.add(adresse, length)
+                arrayValue.append(0)
+                arrayValue.append(length)
+                tabAdresses[adresse] = arrayValue
 
-    
+    fd = open("rapport_longueur.txt", "w", encoding="utf-8", errors="surrogateescape")
+    for adresse in tabAdresses:
+        print(adresse + " a écrit en moyenne " + str(tabAdresses[adresse][1]) + " lignes en " + str(tabAdresses[adresse][0] - 1) + " mails\n")
+        fd.write(adresse + " : " + str(tabAdresses[adresse][1]) + " - " + str(tabAdresses[adresse][0] - 1))
+    fd.close()

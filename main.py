@@ -4,6 +4,7 @@ import parser
 import filter
 import responseTime
 import statistique
+import length
 import os
 
 # ---------- Définition des fonctions ----------
@@ -32,7 +33,7 @@ def affichageMailCorpus(corpus):
 
 def menuPrincipal():
     cleanScreen()
-    print("-----------------------------\n Que voulez-vous faire ?\n -----------------------------\n 1. Afficher les mails\n 2. Filtrer les mails\n 3. Utiliser les fils de discussion\n 4. Quitter\n")
+    print("-----------------------------\n Que voulez-vous faire ?\n -----------------------------\n 1. Afficher les mails\n 2. Filtrer les mails\n 3. Utiliser les fils de discussion\n 4. Générer un rapport complet\n 5. Quitter\n")
     choice = str(input("Votre choix : "))
     corpus = ""
     if (choice == "1"):
@@ -69,7 +70,13 @@ def menuPrincipal():
             exped = current_file[1][9:]
             date = current_file[0][9:]
             print(str(nb_mail)+". Objet : "+obj+" De : "+exped + " Date : "+date)
-            print(type(corpus))
+    elif (choice == "4") :
+        print("Etes-vous sûr de vouloir générer un rapport complet ? Cette action peut être très longue")
+        valider = input("[o/n] : ")
+        if valider in ["y","Y","O","o"]:
+            print("création du rapport sur le corpus...")
+            rapport_total("")
+            print("rapport_corpus.txt généré")
     else:
         try:
             shutil.rmtree("tmp")
@@ -84,6 +91,8 @@ def menuPrincipal():
     else:
         return corpus
 
+
+
 def menuAction(corpus):
     while True:
         print("-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Calcul du temps de réponse\n 2. Calcul de la longueur des mails\n 3. Statistiques sur les mails\n 4. Quitter\n")
@@ -96,7 +105,7 @@ def menuAction(corpus):
                 print("Le calcul du temps de réponse est calculable uniquement sur les fils de discussions.\n")
         elif (action == "2"):
             print("Longueur de mails\n")
-            #responseTime.main(corpus)
+            length.main(corpus)
             break
         elif (action == "3"):
             print("Statistiques sur les mails\n")

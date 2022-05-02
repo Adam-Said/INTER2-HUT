@@ -1,6 +1,54 @@
 import os
 import clean
 import operator
+from datetime import datetime
+
+
+
+
+def num_to_jour(num):
+    if num == 1:
+        return "Lundi"
+    if num == 2:
+        return "Mardi"
+    if num == 3:
+        return "Mercredi"
+    if num == 4:
+        return "Jeudi"
+    if num == 5:
+        return "Vendredi"
+    if num == 6:
+        return "Samedi"
+    else:
+        return "Dimanche"
+
+
+def num_to_mois(num):
+    if num == 1:
+        return "Janvier"
+    if num == 2:
+        return "Février"
+    if num == 3:
+        return "Mars"
+    if num == 4:
+        return "Avril"
+    if num == 5:
+        return "Mai"
+    if num == 6:
+        return "Juin"
+    if num == 7:
+        return "Juillet"
+    if num == 8:
+        return "Aout"
+    if num == 9:
+        return "Septembre"
+    if num == 10:
+        return "Octobre"
+    if num == 11:
+        return "Novembre"
+    else:
+        return "Decembre"
+
 
 
 def total_mail():
@@ -71,6 +119,44 @@ def nb_mail_pj(corpus):
 
 
 
+def nb_mail_mois(corpus):
+    tab_mois = [0 for i in range(12)]
+    for path, subdirs, files in os.walk('tmp'):
+        try:
+            doss = path.split(clean.slash())[1]
+            for name in files:
+                if (corpus == [] or ((os.path.join(doss,name) in corpus))):
+                    with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
+                        for ligne in fd:
+                            mois = (ligne.split(" ")[1]).split("/")[1]
+                            tab_mois[int(mois)-1] += 1
+                            break
+        except:
+            pass
+    return tab_mois
+
+
+
+def nb_mail_semaine(corpus):
+    tab_semaine = [0 for i in range(7)]
+    for path, subdirs, files in os.walk('tmp'):
+        try:
+            doss = path.split(clean.slash())[1]
+            for name in files:
+                if (corpus == [] or ((os.path.join(doss,name) in corpus))):
+                    with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
+                        for ligne in fd:
+                            date = (ligne.split(" ")[1]).split("/")
+                            jour = datetime.strptime(date[2]+"-"+date[1]+"-"+date[0], "%Y-%m-%d")
+                            tab_semaine[jour.weekday()] += 1
+                            break
+        except:
+            pass
+    return tab_semaine
+
+
+
+
 def all_dates(corpus):
     if corpus == []:
         return os.listdir('tmp')
@@ -84,24 +170,6 @@ def all_dates(corpus):
 
 
 
-
-def nb_par_mois(corpus):
-    tab_mois = [0 for i in range(12)]
-    for path, subdirs, files in os.walk('tmp'):
-        try:
-            doss = path.split(clean.slash())[1]
-            for name in files:
-                if (corpus == [] or ((os.path.join(doss,name) in corpus))):
-                    with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
-                        print(fd[1][12:15])
-                        #tab_mois[fd[1][12:15]] += 1
-        except:
-            pass
-    return tab_mois
-
-
-print(nb_par_mois([]))
-input()
 
 
 def all_adr(corpus):
@@ -132,7 +200,7 @@ def rapport_total(corpus):
         #Création du fichier du rapport
         f = open("rapport_complet.txt", "w", encoding="utf-8", errors="surrogateescape")
         #rapport pour les années
-        f.write("\nAnnées :\n")
+        f.write("Années :\n")
         tab = {}
         for an in ans:
             nb_an = nb_mail_annee(an, [])
@@ -145,6 +213,24 @@ def rapport_total(corpus):
         for addr in addrs:
             nb_adr = nb_mail_adresse(addr, [])
             tab[addr] = round(100*nb_adr/nb_total,2)
+        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+            f.write(str(v) + "% " + k + "\n")
+        #rapport pour les mois  
+        f.write("\nMois :\n")
+        tab = {}
+        tab_mois = nb_mail_mois([])
+        for i in range(len(tab_mois)):
+            if tab_mois[i] != 0:
+                tab[num_to_mois(i+1)] = round(100*tab_mois[i]/sum(tab_mois),2)
+        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+            f.write(str(v) + "% " + k + "\n")
+        #rapport pour les jour de la semaine  
+        f.write("\nSemaine :\n")
+        tab = {}
+        tab_semaine = nb_mail_semaine([])
+        for i in range(len(tab_semaine)):
+            if tab_semaine[i] != 0:
+                tab[num_to_jour(i+1)] = round(100*tab_semaine[i]/sum(tab_semaine),2)
         for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
             f.write(str(v) + "% " + k + "\n")
         #rapport pour les pièces jointes
@@ -185,6 +271,24 @@ def rapport_total(corpus):
             tab[addr] = round(100*nb_adr/nb_corpus,2)
         for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
             f.write(str(v) + "% " + k + "\n")
+        #rapport pour les mois  
+        f.write("\nMois :\n")
+        tab = {}
+        tab_mois = nb_mail_mois(corpus)
+        for i in range(len(tab_mois)):
+            if tab_mois[i] != 0:
+                tab[num_to_mois(i+1)] = round(100*tab_mois[i]/sum(tab_mois),2)
+        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+            f.write(str(v) + "% " + k + "\n")
+        #rapport pour les jour de la semaine  
+        f.write("\nSemaine :\n")
+        tab = {}
+        tab_semaine = nb_mail_semaine(corpus)
+        for i in range(len(tab_semaine)):
+            if tab_semaine[i] != 0:
+                tab[num_to_jour(i+1)] = round(100*tab_semaine[i]/sum(tab_semaine),2)
+        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+            f.write(str(v) + "% " + k + "\n")
         #rapport pour les pièces jointes
         nb_pj = nb_mail_pj(corpus)
         f.write("\n"+str(round(100*nb_pj/nb_total,2))+"% de pièces jointes")
@@ -200,10 +304,12 @@ def main(corpus):
         print("-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Statistiques sur le corpus\n 2. Générer un rapport complet\n 3. Quitter\n")
         action = input("Votre choix : ")
         if (action == "1"):
+            print("création du rapport sur le corpus...")
             rapport_total(corpus)
             print("rapport_corpus.txt généré")
             break
         elif (action == "2"): #rapport complet
+            print("création du rapport complet...")
             rapport_total("")
             print("rapport_complet.txt généré")
             break
@@ -212,12 +318,3 @@ def main(corpus):
         else: #autre choix
             clean.cleanScreen()
             print("Cette option n'existe pas")
-
-
-
-
-corpus = "2015/1 2015/2 2015/3 2015/14"
-main(corpus)
-
-
-#rapport_total()
