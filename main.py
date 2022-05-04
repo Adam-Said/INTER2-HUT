@@ -33,7 +33,7 @@ def affichageMailCorpus(corpus):
 
 def menuPrincipal():
     cleanScreen()
-    print("-----------------------------\n Que voulez-vous faire ?\n -----------------------------\n 1. Afficher les mails\n 2. Filtrer les mails\n 3. Utiliser les fils de discussion\n 4. Générer un rapport complet\n 5. Quitter\n")
+    print("-----------------------------\n Que voulez-vous faire ?\n -----------------------------\n 1. Afficher les mails\n 2. Filtrer les mails\n 3. Utiliser les fils de discussion (threads)\n 4. Générer un rapport complet\n 5. Quitter\n")
     choice = str(input("Votre choix : "))
     corpus = ""
     if (choice == "1"):
@@ -45,10 +45,17 @@ def menuPrincipal():
         print("Affichage du corpus de mails sélectionné :\n")
         affichageMailCorpus(corpus)
     elif (choice == "3"):
+        try: # Création des threads
+            os.mkdir("threads")
+            print("Création des threads, merci de patienter...\n Cette opération peut prendre du temps !")
+            parser.threader()
+            print("Création des threads terminée")
+        except:
+            pass
         nb_fil = 0
-        print("Vous pouvez choisir le minimum de mails voulu par fil (0 sinon)\n")
+        print("Choisissez le minimum de mails voulu par fil (0 sinon)\n")
         min = input("Votre choix... ")
-        print("Vous pouvez choisir le maximum de mails voulu par fil (0 sinon)\n")
+        print("Choisissez le maximum de mails voulu par fil (0 sinon)\n")
         max = input("Votre choix... ")
         print("Affichage du corpus de mails :\n")
         for dossier in os.listdir("threads") :
@@ -133,14 +140,11 @@ def main() :
     except:
         shutil.rmtree("tmp")
         os.mkdir("tmp")
-        True
     
     try:
-        os.mkdir("threads")
-    except:
         shutil.rmtree("threads")
-        os.mkdir("threads")
-        True
+    except:
+        pass
     # Attente du dépôt des fichiers
     check = "" #ok pour debug_mode
     while check != "ok" or len(os.listdir('__MAIL_DEPOT__')) == 0:
@@ -155,11 +159,6 @@ def main() :
     print("Nettoyage des mails, merci de patienter...\n Cette opération peut prendre du temps !")
     parser.cleaner()
     print("Nettoyage des mails terminé")
-
-    # Création des threads
-    print("Création des threads, merci de patienter...\n Cette opération peut prendre du temps !")
-    parser.threader()
-    print("Création des threads terminé")
 
     while(True):
         # Affichage du menu et choix du corpus

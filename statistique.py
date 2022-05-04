@@ -194,12 +194,13 @@ def all_adr(corpus):
 
 def rapport_total(corpus):
     IDs = [mail for mail in (corpus.replace("-","/")).strip().split(" ") if mail != '']
+    nb_total = total_mail()
     nb_corpus = len(IDs)
     if IDs == []:
-        nb_corpus = total_mail()
+        nb_corpus = nb_total
     addrs = all_adr(IDs)
     ans = all_dates(IDs)
-    nb_total = total_mail()
+    
     #Création du fichier du rapport
     if IDs == []:
         f = open("rapport_complet.csv", "w", encoding="utf-8", errors="surrogateescape")
@@ -221,7 +222,7 @@ def rapport_total(corpus):
     tab = {}
     for addr in addrs:
         nb_adr = nb_mail_adresse(addr, [])
-        tab[addr] = round(100*nb_adr/nb_total,2)
+        tab[addr] = round(100*nb_adr/nb_corpus,2)
     for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
         f.write(k+ ";" + str(v) + "%\n")
     if IDs != []:
@@ -253,7 +254,7 @@ def rapport_total(corpus):
         f.write(k+ ";" + str(v) + "%\n")
     #rapport pour les pièces jointes
     nb_pj = nb_mail_pj(IDs)
-    f.write("\nPourcentage de pièces jointes\n"+str(round(100*nb_pj/nb_total,2))+"%")
+    f.write("\nPourcentage de pièces jointes\n"+str(round(100*nb_pj/nb_corpus,2))+"%")
               
     f.close()
 
@@ -261,6 +262,7 @@ def rapport_total(corpus):
 
 
 def main(corpus):
+    corpus = clean.thread_to_corpus(corpus)
     clean.cleanScreen()
     while True:
         print("-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Statistiques sur le corpus\n 2. Générer un rapport complet\n 3. Quitter\n")

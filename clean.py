@@ -12,11 +12,15 @@ def slash():
         return "\\"
     elif (os.name == "posix"):
         return "/"
+            
 
 
-def progress(nb, max, message):
-    if max > 0:
-        progress = (nb/max)
-        if int(progress*100) - progress*100 <= progress - 1:
-            cleanScreen()
-            print(message, str(int(progress*100)) + "%")
+
+def thread_to_corpus(corpus):
+    if(set('abcdefghijklmnopqrstuvwxyz').intersection(corpus)): # True = corpus de threads
+        corpus2 = ""
+        for mail in os.listdir("threads"+slash()+corpus):
+            corpus2 += (mail.split(",")[1] + " ")
+        return corpus2
+    else:
+        return corpus
