@@ -1,6 +1,6 @@
 # Projet INTER2-HUT ✉
 
-![GitHub version](https://img.shields.io/badge/version-3.0.1-brightgreen)
+![GitHub version](https://img.shields.io/badge/version-3.0.2-brightgreen)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Gaiko19_INTER2-HUT&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Gaiko19_INTER2-HUT)
 ## Projet d'analyseur de mails dans le cadre d'un sous-projet pour l'HUman at home projecT 🏠

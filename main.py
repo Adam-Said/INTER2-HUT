@@ -127,7 +127,7 @@ def menuAction(corpus):
       
 def main() :
     cleanScreen()
-    print("------- Scripts HUT V3.0 -------")
+    print("------- Scripts HUT V3.0.2 -------")
 
     # Création dossiers de dépôt et de destination
     try:
