@@ -78,12 +78,14 @@ def menuPrincipal():
             print("rapport_corpus.txt généré")
     else:
         try:
+            print("Suppression de tmp")
             shutil.rmtree("tmp")
+            print("Suppression de threads")
             shutil.rmtree("threads")
         except:
             True
         print("\n------- Fin -------")
-        exit(0)
+        exit(1)
       
     if(corpus == ""):
         menuPrincipal()
@@ -105,7 +107,6 @@ def menuAction(corpus):
         elif (action == "2"):
             print("Longueur de mails\n")
             length.main(corpus)
-            break
         elif (action == "3"):
             print("Statistiques sur les mails\n")
             statistique.main(corpus)
@@ -140,9 +141,8 @@ def main() :
         shutil.rmtree("threads")
         os.mkdir("threads")
         True
-    
     # Attente du dépôt des fichiers
-    check = "ok" #ok si debug_mode
+    check = "" #ok pour debug_mode
     while check != "ok" or len(os.listdir('__MAIL_DEPOT__')) == 0:
         check = input("Pour commencer, ajoutez vos fichiers à traiter dans le dossier __MAIL_DEPOT__ puis écrivez \"ok\" \n")
     

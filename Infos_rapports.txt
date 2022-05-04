@@ -1,4 +1,4 @@
 Années : pour chaque année, le pourcentage de mails du corpus qui sont de cette année
-Adresses du corpus : la répartition des adresses mails des mails du corpus au sein de l'ensemble des mails
+Adresses du corpus : la répartition des adresses du corpus au sein de l'ensemble des mails
 Adresses au sein corpus : répartition des adresses mails uniquement dans le corpus 
 Pièces jointes : Proportions de mails contenant une pièce jointes dans le corpus
