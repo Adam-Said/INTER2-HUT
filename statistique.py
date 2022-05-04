@@ -193,107 +193,69 @@ def all_adr(corpus):
 
 
 def rapport_total(corpus):
-    if corpus.strip() == "":
-        addrs = all_adr([])
-        ans = all_dates([])
-        nb_total = total_mail()
-        #Création du fichier du rapport
+    IDs = [mail for mail in (corpus.replace("-","/")).strip().split(" ") if mail != '']
+    nb_corpus = len(IDs)
+    if IDs == []:
+        nb_corpus = total_mail()
+    addrs = all_adr(IDs)
+    ans = all_dates(IDs)
+    nb_total = total_mail()
+    #Création du fichier du rapport
+    if IDs == []:
         f = open("rapport_complet.csv", "w", encoding="utf-8", errors="surrogateescape")
-        #rapport pour les années
-        f.write("sep=;\nAnnées;Pourcentage\n")
-        tab = {}
-        for an in ans:
-            nb_an = nb_mail_annee(an, [])
-            tab[an] = round(100*nb_an/nb_total,2)
-        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
-            f.write(k+ ";" + str(v) + "%\n")
-        #rapport pour les adresses  
-        f.write("\nAdresses;Pourcentage\n")
-        tab = {}
-        for addr in addrs:
-            nb_adr = nb_mail_adresse(addr, [])
-            tab[addr] = round(100*nb_adr/nb_total,2)
-        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
-            f.write(k + ";" + str(v) + "%\n")
-        #rapport pour les mois  
-        f.write("\nMois;Pourcentage\n")
-        tab = {}
-        tab_mois = nb_mail_mois([])
-        for i in range(len(tab_mois)):
-            if tab_mois[i] != 0:
-                tab[num_to_mois(i+1)] = round(100*tab_mois[i]/sum(tab_mois),2)
-        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
-            f.write(k + ";" + str(v) + "%\n")
-        #rapport pour les jour de la semaine  
-        f.write("\nSemaine;Pourcentage\n")
-        tab = {}
-        tab_semaine = nb_mail_semaine([])
-        for i in range(len(tab_semaine)):
-            if tab_semaine[i] != 0:
-                tab[num_to_jour(i+1)] = round(100*tab_semaine[i]/sum(tab_semaine),2)
-        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
-            f.write(k + ";" + str(v) + "%\n")
-        #rapport pour les pièces jointes
-        nb_pj = nb_mail_pj([])
-        f.write("\nPourcentage de pièces jointes\n"+str(round(100*nb_pj/nb_total,2))+"%")
-                  
-        f.close()
-
-    else: #si on a passé un corpus en paramètres
-        IDs = (corpus.replace("-","/")).split(" ")[:-1]
-        nb_corpus = len(IDs)
-        addrs = all_adr(IDs)
-        ans = all_dates(IDs)
-        nb_total = total_mail()
-        #Création du fichier du rapport
+    else:
         f = open("rapport_corpus.csv", "w", encoding="utf-8", errors="surrogateescape")
-        #rapport pour les années
-        f.write("sep=;\nAnnées;Pourcentage\n")
-        tab = {}
-        for an in ans:
-            nb_an = nb_mail_annee(an, corpus)
-            tab[an] = round(100*nb_an/nb_corpus,2)
-        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
-            f.write(k+ ";" + str(v) + "%\n")
-        #rapport pour les adresses  
-        f.write("\nAdresses du corpus;Pourcentage\n")  
-        tab = {}
-        for addr in addrs:
-            nb_adr = nb_mail_adresse(addr, [])
-            tab[addr] = round(100*nb_adr/nb_total,2)
-        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
-            f.write(k+ ";" + str(v) + "%\n")
+    #rapport pour les années
+    f.write("sep=;\nAnnées;Pourcentage\n")
+    tab = {}
+    for an in ans:
+        nb_an = nb_mail_annee(an, IDs)
+        tab[an] = round(100*nb_an/nb_corpus,2)
+    for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+        f.write(k+ ";" + str(v) + "%\n")
+    #rapport pour les adresses  
+    if IDs != []:  
+        f.write("\nAdresses du corpus;Pourcentage\n") 
+    else:
+        f.write("\nAdresses;Pourcentage\n")
+    tab = {}
+    for addr in addrs:
+        nb_adr = nb_mail_adresse(addr, [])
+        tab[addr] = round(100*nb_adr/nb_total,2)
+    for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+        f.write(k+ ";" + str(v) + "%\n")
+    if IDs != []:
         #rapport pour les adresses 
         f.write("\nAdresses au sein du corpus;Pourcentage\n")
         tab = {}
         for addr in addrs:
-            nb_adr = nb_mail_adresse(addr, corpus)
+            nb_adr = nb_mail_adresse(addr, IDs)
             tab[addr] = round(100*nb_adr/nb_corpus,2)
         for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
             f.write(k+ ";" + str(v) + "%\n")
-        #rapport pour les mois  
-        f.write("\nMois;Pourcentage\n")
-        tab = {}
-        tab_mois = nb_mail_mois(corpus)
-        for i in range(len(tab_mois)):
-            if tab_mois[i] != 0:
-                tab[num_to_mois(i+1)] = round(100*tab_mois[i]/sum(tab_mois),2)
-        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
-            f.write(k+ ";" + str(v) + "%\n")
-        #rapport pour les jour de la semaine  
-        f.write("\nSemaine;Pourcentage\n")
-        tab = {}
-        tab_semaine = nb_mail_semaine(corpus)
-        for i in range(len(tab_semaine)):
-            if tab_semaine[i] != 0:
-                tab[num_to_jour(i+1)] = round(100*tab_semaine[i]/sum(tab_semaine),2)
-        for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
-            f.write(k+ ";" + str(v) + "%\n")
-        #rapport pour les pièces jointes
-        nb_pj = nb_mail_pj(corpus)
-        f.write("\nPourcentage de pièces jointes\n"+str(round(100*nb_pj/nb_total,2))+"%")
-                  
-        f.close()
+    #rapport pour les mois  
+    f.write("\nMois;Pourcentage\n")
+    tab = {}
+    tab_mois = nb_mail_mois(IDs)
+    for i in range(len(tab_mois)):
+        if tab_mois[i] != 0:
+            tab[num_to_mois(i+1)] = round(100*tab_mois[i]/sum(tab_mois),2)
+    for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+        f.write(k+ ";" + str(v) + "%\n")
+    #rapport pour les jour de la semaine  
+    f.write("\nSemaine;Pourcentage\n")
+    tab = {}
+    tab_semaine = nb_mail_semaine(IDs)
+    for i in range(len(tab_semaine)):
+        if tab_semaine[i] != 0:
+            tab[num_to_jour(i+1)] = round(100*tab_semaine[i]/sum(tab_semaine),2)
+    for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
+        f.write(k+ ";" + str(v) + "%\n")
+    #rapport pour les pièces jointes
+    nb_pj = nb_mail_pj(IDs)
+    f.write("\nPourcentage de pièces jointes\n"+str(round(100*nb_pj/nb_total,2))+"%")
+              
+    f.close()
 
 
 
@@ -306,12 +268,12 @@ def main(corpus):
         if (action == "1"):
             print("création du rapport sur le corpus...")
             rapport_total(corpus)
-            print("rapport_corpus.txt généré")
+            print("rapport_corpus.csv généré")
             break
         elif (action == "2"): #rapport complet
             print("création du rapport complet...")
             rapport_total("")
-            print("rapport_complet.txt généré")
+            print("rapport_complet.csv généré")
             break
         elif (action == "3"): #sortie
             exit(1)

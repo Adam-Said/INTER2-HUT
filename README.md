@@ -29,7 +29,7 @@ Pour ce faire le programme utilise des mails exportés depuis Thunderbird qu'il 
 
 > Pour chaque fonction il est possible d'au préalable filtrer les mails par adresse, date (précise, avant, après, entre), mot contenu, présence de pièces jointes ou bien d'utiliser les mails regroupés par fils de discussion
 
-Sur un courpus de mails vous pouvez :
+Sur un corpus de mails vous pouvez :
 
 - Calculer le temps de réponse
 - Calculer la longueur de moyenne des mails par adresses
