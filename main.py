@@ -4,7 +4,6 @@ import parser
 import filter
 import responseTime
 import statistique
-import length
 import os
 
 # ---------- Définition des fonctions ----------
@@ -57,7 +56,7 @@ def menuPrincipal():
         min = input("Votre choix... ")
         print("Choisissez le maximum de mails voulu par fil (0 sinon)\n")
         max = input("Votre choix... ")
-        print("Affichage du corpus de mails :\n")
+        print("Affichage des corpus de mails :\n")
         for dossier in os.listdir("threads") :
             nb_fil +=1
             if(int(max) == 0 and int(len(os.listdir("threads/"+dossier))) >= int(min)):
@@ -80,9 +79,9 @@ def menuPrincipal():
         print("Etes-vous sûr de vouloir générer un rapport complet ? Cette action peut être très longue")
         valider = input("[o/n] : ")
         if valider in ["y","Y","O","o"]:
-            print("création du rapport sur le corpus...")
+            print("création du rapport complet en cours...")
             statistique.rapport_total("")
-            print("rapport_corpus.txt généré")
+            print("rapport_complet.csv généré")
     else:
         try:
             print("Suppression de tmp")
@@ -103,7 +102,7 @@ def menuPrincipal():
 
 def menuAction(corpus):
     while True:
-        print("-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Calcul du temps de réponse\n 2. Calcul de la longueur des mails\n 3. Statistiques sur les mails\n 4. Quitter\n")
+        print("-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Calcul du temps de réponse\n 2. Statistiques sur les mails\n 3. Quitter\n")
         action = input("Votre choix : ")
         if (action == "1"):
             if(set('abcdefghijklmnopqrstuvwxyz').intersection(corpus)):
@@ -112,12 +111,9 @@ def menuAction(corpus):
             else:
                 print("Le calcul du temps de réponse est calculable uniquement sur les fils de discussions.\n")
         elif (action == "2"):
-            print("Longueur de mails\n")
-            length.main(corpus)
-        elif (action == "3"):
             print("Statistiques sur les mails\n")
             statistique.main(corpus)
-        elif (action == "4"):
+        elif (action == "3"):
             print("------ Fin ------")
             break
         else:
@@ -127,7 +123,7 @@ def menuAction(corpus):
       
 def main() :
     cleanScreen()
-    print("------- Scripts HUT V3.0.2 -------")
+    print("------- Scripts HUT V3.0.3 -------")
 
     # Création dossiers de dépôt et de destination
     try:

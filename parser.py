@@ -88,11 +88,14 @@ def cleaner() :
     for path in os.listdir("tmp"):
         nb_mails += len(os.listdir(os.path.join("tmp", path)))
     #début du nétoyage des fichiers
+    nb_doss_total = len(os.listdir("tmp"))
+    nb_doss = 0
     for dossier in os.listdir("tmp"):
+        nb_doss += 1
         mailCount = 0
         for file in os.listdir("tmp" + slash + dossier):
             mailCount += 1
-            progress(mailCount, nb_mails, "Nétoyage des mails")
+            progress(mailCount, nb_mails, "Nétoyage des mails ("+str(nb_doss)+"/"+str(nb_doss_total)+")")
             dateEnvoi = "__Date__ "
             expediteur = "__From__ "
             destinataire = "__To__ "

@@ -2,8 +2,7 @@ import os
 import clean
 import operator
 from datetime import datetime
-
-
+slash = clean.slash()
 
 
 def num_to_jour(num):
@@ -54,8 +53,7 @@ def num_to_mois(num):
 def total_mail():
     cpt = 0
     for path, subdirs, files in os.walk('tmp'):
-        for name in files:
-            cpt += 1
+        cpt += len(files)
     return cpt
 
 
@@ -65,7 +63,7 @@ def nb_mail_annee(an, corpus):
     cpt = 0
     for path, subdirs, files in os.walk('tmp'):
         try:
-            doss = path.split(clean.slash())[1]
+            doss = path.split(slash)[1]
             for name in files:
                 if doss == an and (corpus == [] or (os.path.join(doss,name) in corpus)):
                     cpt += 1
@@ -80,7 +78,7 @@ def nb_mail_adresse(ad, corpus):
     cpt = 0
     for path, subdirs, files in os.walk('tmp'):
         try:
-            doss = path.split(clean.slash())[1]
+            doss = path.split(slash)[1]
             for name in files:
                 if (corpus == [] or ((os.path.join(doss,name) in corpus))):
                     with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
@@ -100,7 +98,7 @@ def nb_mail_pj(corpus):
     cpt = 0
     for path, subdirs, files in os.walk('tmp'):
         try:
-            doss = path.split(clean.slash())[1]
+            doss = path.split(slash)[1]
             for name in files:
                 if (corpus == [] or ((os.path.join(doss,name) in corpus))):
                     with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
@@ -123,7 +121,7 @@ def nb_mail_mois(corpus):
     tab_mois = [0 for i in range(12)]
     for path, subdirs, files in os.walk('tmp'):
         try:
-            doss = path.split(clean.slash())[1]
+            doss = path.split(slash)[1]
             for name in files:
                 if (corpus == [] or ((os.path.join(doss,name) in corpus))):
                     with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
@@ -141,7 +139,7 @@ def nb_mail_semaine(corpus):
     tab_semaine = [0 for i in range(7)]
     for path, subdirs, files in os.walk('tmp'):
         try:
-            doss = path.split(clean.slash())[1]
+            doss = path.split(slash)[1]
             for name in files:
                 if (corpus == [] or ((os.path.join(doss,name) in corpus))):
                     with open(os.path.join(path, name), "r", encoding="utf-8", errors="surrogateescape") as fd:
@@ -188,6 +186,27 @@ def all_adr(corpus):
 
   
 
+def longueur(corpus):
+    tabAdresses = {}
+    for path, subdirs, files in os.walk('tmp'):
+        for mail in files:
+            if (corpus == []) or (os.path.join(path[4:], mail) in corpus):
+                file = open(os.path.join(path, mail), encoding="utf-8", errors="surrogateescape").readlines()
+                adresse = file[1][9:]
+                adresse = adresse.split("\n")[0]
+                length = len(file) - 6
+                arrayValue = []
+                if adresse in tabAdresses:
+                    cpt = tabAdresses.get(adresse)[0]
+                    arrayValue.append(cpt+1)
+                    arrayValue.append((tabAdresses.get(adresse)[1] + length)/ (cpt+1))
+                    tabAdresses[adresse] = arrayValue
+                else:
+                    arrayValue.append(1)
+                    arrayValue.append(length)
+                    tabAdresses[adresse] = arrayValue
+    return tabAdresses
+
 
 
 
@@ -195,11 +214,11 @@ def all_adr(corpus):
 def rapport_total(corpus):
     IDs = [mail for mail in (corpus.replace("-","/")).strip().split(" ") if mail != '']
     nb_total = total_mail()
+    addrs = all_adr(IDs)
+    ans = all_dates(IDs)
     nb_corpus = len(IDs)
     if IDs == []:
         nb_corpus = nb_total
-    addrs = all_adr(IDs)
-    ans = all_dates(IDs)
     
     #Création du fichier du rapport
     if IDs == []:
@@ -252,11 +271,19 @@ def rapport_total(corpus):
             tab[num_to_jour(i+1)] = round(100*tab_semaine[i]/sum(tab_semaine),2)
     for k, v in sorted(tab.items(), key=operator.itemgetter(1), reverse=True):
         f.write(k+ ";" + str(v) + "%\n")
+    #rapport pour la longueur
+    f.write("\nLongueur des mails\n")
+    f.write("Adresse;Longueur moyenne;Nombre de mails\n")
+    tabAdresses = longueur(IDs)
+    for adresse, vals in sorted(tabAdresses.items(), key=operator.itemgetter(1), reverse=True):
+        f.write(adresse + ";" + str(round(vals[1],1)) + ";" + str(vals[0]) + "\n")
     #rapport pour les pièces jointes
     nb_pj = nb_mail_pj(IDs)
     f.write("\nPourcentage de pièces jointes\n"+str(round(100*nb_pj/nb_corpus,2))+"%")
               
     f.close()
+
+
 
 
 
@@ -268,7 +295,7 @@ def main(corpus):
         print("-----------------------------\nQue voulez-vous faire ?\n-----------------------------\n 1. Statistiques sur le corpus\n 2. Générer un rapport complet\n 3. Quitter\n")
         action = input("Votre choix : ")
         if (action == "1"):
-            print("création du rapport sur le corpus...")
+            print("création du rapport en cours...")
             rapport_total(corpus)
             print("rapport_corpus.csv généré")
             break

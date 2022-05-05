@@ -1,3 +1,0 @@
-🟨 4. Faire le rapport
-🟥 5. Mettre le rapport en Latex
-🟥 6. Diapo oral
