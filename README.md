@@ -1,6 +1,8 @@
 # Projet INTER2-HUT ✉
 
 ![GitHub version](https://img.shields.io/badge/version-3.0.3-brightgreen)
+![GitHub](https://img.shields.io/github/license/Gaiko19/INTER2-HUT)
+![GitHub all releases](https://img.shields.io/github/downloads/Gaiko19/INTER2-HUT/total)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Gaiko19_INTER2-HUT&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Gaiko19_INTER2-HUT)
 ## Projet d'analyseur de mails dans le cadre d'un sous-projet pour l'HUman at home projecT 🏠
@@ -38,6 +40,7 @@ Sur un corpus de mails vous pouvez :
 - Calculer la longueur de moyenne des mails par adresses
 - Générer des rapports précisant la part d'adresses par corpus, le nombre de mails par mois ou jour de la semaine et le pourcentage de pièces jointes
 - Exporter vos données précédemment calculées
+
 
 
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=Gaiko19_INTER2-HUT)
