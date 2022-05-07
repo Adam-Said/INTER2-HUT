@@ -212,7 +212,7 @@ def longueur(corpus):
 
 
 def rapport_total(corpus):
-    IDs = [mail for mail in (corpus.replace("-","/")).strip().split(" ") if mail != '']
+    IDs = [mail for mail in (corpus.replace("-",slash)).strip().split(" ") if mail != '']
     nb_total = total_mail()
     addrs = all_adr(IDs)
     ans = all_dates(IDs)
