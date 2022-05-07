@@ -8,15 +8,6 @@ utf_code = [ligne.split(":") for ligne in open("dico_utf8.txt", encoding="utf-8"
 utf8Dico = {utf[0]:utf[1].strip('\n') for utf in utf_code}
 slash = clean.slash()
 
-'''
-def progress(nb, max, message):
-    if max > 0:
-        progress = (nb/max)*100
-        if progress - int(progress) <= (1.5/float(max))*100:
-            clean.cleanScreen()
-            print(message, str(int(progress)) + "%")
-'''
-
 
 def dateTranslation(date_input) : # Traduction des mois en lettres en chiffres
     date_tmp = date_input.split(" ")
@@ -84,19 +75,9 @@ def cutter() :
 
 
 def cleaner() :
-    #compte du nombre de mails totaux
-    nb_mails = 0
-    for path in os.listdir("tmp"):
-        nb_mails += len(os.listdir(os.path.join("tmp", path)))
-    #début du nétoyage des fichiers
-    nb_doss_total = len(os.listdir("tmp"))
-    nb_doss = 0
+    #début du nettoyage des fichiers
     for dossier in os.listdir("tmp"):
-        nb_doss += 1
-        mailCount = 0
         for file in os.listdir("tmp" + slash + dossier):
-            mailCount += 1
-            #progress(mailCount, nb_mails, "Nétoyage des mails ("+str(nb_doss)+"/"+str(nb_doss_total)+")")
             dateEnvoi = "__Date__ "
             expediteur = "__From__ "
             destinataire = "__To__ "
@@ -222,14 +203,8 @@ def cleaner() :
 
 
 def threader():
-    cpt = 0
-    total = 0
-    for path in os.listdir("tmp"):
-        total += len(os.listdir(os.path.join("tmp", path)))
     for dossier in os.listdir("tmp"):
         for file in os.listdir("tmp" + slash + dossier):
-            cpt += 1
-            #progress(cpt, total, "Création des threads de messages (1/2)")
             currentFile = open("tmp" + slash + dossier + slash + file, "r", encoding="utf-8", errors="surrogateescape").readlines()
             objet = currentFile[3][11:]
             try:
@@ -248,11 +223,7 @@ def threader():
                 newFile.write(line)
             newFile.close()
 
-    cpt = 0
-    total = len(os.listdir("threads"))
     for dossier in os.listdir("threads"):
-        cpt += 1
-        #progress(cpt, total, "Création des threads de messages (2/2)")
         path = "threads" + slash + dossier
         if os.path.isfile(path):
             os.remove(path)

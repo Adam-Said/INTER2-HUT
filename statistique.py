@@ -187,7 +187,7 @@ def all_adr(corpus):
   
 
 def longueur(corpus):
-    tabAdresses = {}
+    tab_adresses = {}
     for path, subdirs, files in os.walk('tmp'):
         for mail in files:
             if (corpus == []) or (os.path.join(path[4:], mail) in corpus):
@@ -195,17 +195,17 @@ def longueur(corpus):
                 adresse = file[1][9:]
                 adresse = adresse.split("\n")[0]
                 length = len(file) - 6
-                arrayValue = []
-                if adresse in tabAdresses:
-                    cpt = tabAdresses.get(adresse)[0]
-                    arrayValue.append(cpt+1)
-                    arrayValue.append((tabAdresses.get(adresse)[1] + length)/ (cpt+1))
-                    tabAdresses[adresse] = arrayValue
+                array_value = []
+                if adresse in tab_adresses:
+                    cpt = tab_adresses.get(adresse)[0]
+                    array_value.append(cpt+1)
+                    array_value.append((tab_adresses.get(adresse)[1] + length)/ (cpt+1))
+                    tab_adresses[adresse] = array_value
                 else:
-                    arrayValue.append(1)
-                    arrayValue.append(length)
-                    tabAdresses[adresse] = arrayValue
-    return tabAdresses
+                    array_value.append(1)
+                    array_value.append(length)
+                    tab_adresses[adresse] = array_value
+    return tab_adresses
 
 
 
@@ -274,8 +274,8 @@ def rapport_total(corpus):
     #rapport pour la longueur
     f.write("\nLongueur des mails\n")
     f.write("Adresse;Longueur moyenne;Nombre de mails\n")
-    tabAdresses = longueur(IDs)
-    for adresse, vals in sorted(tabAdresses.items(), key=operator.itemgetter(1), reverse=True):
+    tab_adresses = longueur(IDs)
+    for adresse, vals in sorted(tab_adresses.items(), key=operator.itemgetter(1), reverse=True):
         f.write(adresse + ";" + str(round(vals[1],1)) + ";" + str(vals[0]) + "\n")
     #rapport pour les pièces jointes
     nb_pj = nb_mail_pj(IDs)
