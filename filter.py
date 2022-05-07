@@ -147,7 +147,6 @@ def main():
     choice = input("Combien de mails voulez-vous sélectionner ?\n Tout : \"tout\"\n Un ou certains : numéro des mails séparés par un espace\n Votre choix : ")
     if(choice == "tout") :
         for i in range (len(corpusTmp)):
-            print(corpusTmp[i].split(" ")[2])
             corpus += corpusTmp[i].split(" ")[2] + " "
     else:
         choice = choice.split(" ")

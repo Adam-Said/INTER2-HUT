@@ -1,6 +1,7 @@
 # Projet INTER2-HUT ✉
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/Gaiko19/INTER2-HUT)](https://github.com/Gaiko19/INTER2-HUT/releases/tag/v3.0.4)
+![GitHub version](https://img.shields.io/badge/version-3.0.4-brightgreen)
 
-![GitHub version](https://img.shields.io/badge/version-3.0.3-brightgreen)
 ![GitHub](https://img.shields.io/github/license/Gaiko19/INTER2-HUT)
 ![GitHub all releases](https://img.shields.io/github/downloads/Gaiko19/INTER2-HUT/total)
 
@@ -19,7 +20,7 @@ Pour ce faire le programme utilise des mails exportés depuis Thunderbird qu'il 
 
 ❗ Il vous faut avoir Python3 🐍 d'installé sur votre machine ❗
 
-1. Tout d'abord téléchargez le package sur notre Github.
+1. Tout d'abord [téléchargez le package sur notre Github](https://github.com/Gaiko19/INTER2-HUT/releases/tag/v3.0.4).
 2. Depuis Thunderbird exportez vos mails dans des fichiers.
    - Pour ce faire, sélectionnez les dossiers dans l'arborescence à gauche (ou Boîte de réception).
    - Clique droit, Enregistrez-sous, Format texte brut.

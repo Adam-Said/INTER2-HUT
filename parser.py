@@ -8,13 +8,14 @@ utf_code = [ligne.split(":") for ligne in open("dico_utf8.txt", encoding="utf-8"
 utf8Dico = {utf[0]:utf[1].strip('\n') for utf in utf_code}
 slash = clean.slash()
 
+'''
 def progress(nb, max, message):
     if max > 0:
         progress = (nb/max)*100
         if progress - int(progress) <= (1.5/float(max))*100:
             clean.cleanScreen()
             print(message, str(int(progress)) + "%")
-
+'''
 
 
 def dateTranslation(date_input) : # Traduction des mois en lettres en chiffres
@@ -95,7 +96,7 @@ def cleaner() :
         mailCount = 0
         for file in os.listdir("tmp" + slash + dossier):
             mailCount += 1
-            progress(mailCount, nb_mails, "Nétoyage des mails ("+str(nb_doss)+"/"+str(nb_doss_total)+")")
+            #progress(mailCount, nb_mails, "Nétoyage des mails ("+str(nb_doss)+"/"+str(nb_doss_total)+")")
             dateEnvoi = "__Date__ "
             expediteur = "__From__ "
             destinataire = "__To__ "
@@ -228,7 +229,7 @@ def threader():
     for dossier in os.listdir("tmp"):
         for file in os.listdir("tmp" + slash + dossier):
             cpt += 1
-            progress(cpt, total, "Création des threads de messages (1/2)")
+            #progress(cpt, total, "Création des threads de messages (1/2)")
             currentFile = open("tmp" + slash + dossier + slash + file, "r", encoding="utf-8", errors="surrogateescape").readlines()
             objet = currentFile[3][11:]
             try:
@@ -251,7 +252,7 @@ def threader():
     total = len(os.listdir("threads"))
     for dossier in os.listdir("threads"):
         cpt += 1
-        progress(cpt, total, "Création des threads de messages (2/2)")
+        #progress(cpt, total, "Création des threads de messages (2/2)")
         path = "threads" + slash + dossier
         if os.path.isfile(path):
             os.remove(path)
