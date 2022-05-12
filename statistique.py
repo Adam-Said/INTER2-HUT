@@ -275,7 +275,7 @@ def rapport_total(corpus):
     f.write("Adresse;Longueur moyenne;Nombre de mails\n")
     tab_adresses = longueur(IDs)
     for adresse, vals in sorted(tab_adresses.items(), key=operator.itemgetter(1), reverse=True):
-        f.write(adresse + ";" + str(round(vals[1]/vals[0],1)) + ";" + str(vals[0]) + "\n")
+        f.write(adresse + ";" + str(round(vals[1]/vals[0],1)) + ";" + str(int(vals[0])) + "\n")
     #rapport pour les pièces jointes
     nb_pj = nb_mail_pj(IDs)
     f.write("\nPourcentage de pièces jointes\n"+str(round(100*nb_pj/nb_corpus,2))+"%")
