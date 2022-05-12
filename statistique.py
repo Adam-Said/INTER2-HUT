@@ -192,14 +192,13 @@ def longueur(corpus):
         for mail in files:
             if (corpus == []) or (os.path.join(path[4:], mail) in corpus):
                 file = open(os.path.join(path, mail), encoding="utf-8", errors="surrogateescape").readlines()
-                adresse = file[1][9:]
-                adresse = adresse.split("\n")[0]
+                adresse = (file[1][9:]).split("\n")[0]
                 length = len(file) - 6
                 array_value = []
                 if adresse in tab_adresses:
                     cpt = tab_adresses.get(adresse)[0]
                     array_value.append(cpt+1)
-                    array_value.append((tab_adresses.get(adresse)[1] + length)/ (cpt+1))
+                    array_value.append((tab_adresses.get(adresse)[1] + length))
                     tab_adresses[adresse] = array_value
                 else:
                     array_value.append(1)
@@ -276,7 +275,7 @@ def rapport_total(corpus):
     f.write("Adresse;Longueur moyenne;Nombre de mails\n")
     tab_adresses = longueur(IDs)
     for adresse, vals in sorted(tab_adresses.items(), key=operator.itemgetter(1), reverse=True):
-        f.write(adresse + ";" + str(round(vals[1],1)) + ";" + str(vals[0]) + "\n")
+        f.write(adresse + ";" + str(round(vals[1]/vals[0],1)) + ";" + str(vals[0]) + "\n")
     #rapport pour les pièces jointes
     nb_pj = nb_mail_pj(IDs)
     f.write("\nPourcentage de pièces jointes\n"+str(round(100*nb_pj/nb_corpus,2))+"%")
