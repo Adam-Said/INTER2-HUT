@@ -196,13 +196,13 @@ def longueur(corpus):
                 length = len(file) - 6
                 array_value = []
                 if adresse in tab_adresses:
-                    cpt = tab_adresses.get(adresse)[0]
+                    cpt = tab_adresses.get(adresse)[1]
+                    array_value.append((tab_adresses.get(adresse)[0] + length))
                     array_value.append(cpt+1)
-                    array_value.append((tab_adresses.get(adresse)[1] + length))
                     tab_adresses[adresse] = array_value
                 else:
-                    array_value.append(1)
                     array_value.append(length)
+                    array_value.append(1)
                     tab_adresses[adresse] = array_value
     return tab_adresses
 
@@ -275,7 +275,7 @@ def rapport_total(corpus):
     f.write("Adresse;Longueur moyenne;Nombre de mails\n")
     tab_adresses = longueur(IDs)
     for adresse, vals in sorted(tab_adresses.items(), key=operator.itemgetter(1), reverse=True):
-        f.write(adresse + ";" + str(round(vals[1]/vals[0],1)) + ";" + str(int(vals[0])) + "\n")
+        f.write(adresse + ";" + str(round(vals[0]/vals[1],1)) + ";" + str(int(vals[1])) + "\n")
     #rapport pour les pièces jointes
     nb_pj = nb_mail_pj(IDs)
     f.write("\nPourcentage de pièces jointes\n"+str(round(100*nb_pj/nb_corpus,2))+"%")
